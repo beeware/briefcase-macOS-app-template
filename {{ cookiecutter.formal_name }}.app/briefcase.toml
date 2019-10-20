@@ -1,4 +1,4 @@
 [paths]
-app_path = "{{ cookiecutter.formal_name }}.app/Contents/Resources/app"
-app_packages_path = "{{ cookiecutter.formal_name }}.app/Contents/Resources/app_packages"
-support_path = "{{ cookiecutter.formal_name }}.app/Contents/Resources"
+app_path = "Contents/Resources/app"
+app_packages_path = "Contents/Resources/app_packages"
+support_path = "Contents/Resources"
