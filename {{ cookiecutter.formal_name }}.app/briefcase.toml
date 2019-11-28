@@ -1,4 +1,8 @@
 [paths]
 app_path = "Contents/Resources/app"
 app_packages_path = "Contents/Resources/app_packages"
-support_path = "Contents/Resources"
+support_path = "Contents/Resources/Support"
+icon = "Contents/Resources/{{ cookiecutter.name }}.icns"
+{% for extension, doctype in cookiecutter.document_types.items() -%}
+document_type_icon.doc = "Contents/Resources/{{ cookiecutter.name }}-{{ extension }}.icns"
+{% endfor %}

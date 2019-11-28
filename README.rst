@@ -18,12 +18,12 @@ However, if you *do* want use this template directly...
 
 1. Install `cookiecutter`_. This is a tool used to bootstrap complex project
    templates::
-
+v
     $ pip install cookiecutter
 
 2. Run ``cookiecutter`` on the template::
 
-    $ cookiecutter https://github.com/beeware/briefcase-macos-app-template --checkout 3.6
+    $ cookiecutter https://github.com/beeware/briefcase-macOS-app-template --checkout 3.6
 
 3. `Download the Python Apple support package for macOS`_, and extract it into
    the ``Contents/Resources`` folder of the main application bundle. This
@@ -86,7 +86,7 @@ third-party library), you should install the library code into the
 directory on a normal Python install.
 
 .. _cookiecutter: http://github.com/cookiecutter/cookiecutter
-.. _Download the Python Apple support package for macOS: https://briefcase-support.s3-us-west-2.amazonaws.com/python/3.6/macos/Python-3.6-macos-support.b7.tar.gz
+.. _Download the Python Apple support package for macOS: https://briefcase-support.s3-us-west-2.amazonaws.com/python/3.6/macOS/Python-3.6-macOS-support.b8.tar.gz
 .. _Python-Apple-support: http://github.com/beeware/Python-Apple-support
 .. _toga: http://beeware.org/toga
 .. _Rubicon: http://github.com/beeware/rubicon-objc
