@@ -7,9 +7,9 @@
 	<key>CFBundleExecutable</key>
 	<string>{{ cookiecutter.formal_name }}</string>
 	<key>CFBundleIconFile</key>
-	<string>{{ cookiecutter.name }}.icns</string>
+	<string>{{ cookiecutter.app_name }}.icns</string>
 	<key>CFBundleIdentifier</key>
-	<string>{{ cookiecutter.bundle }}.{{ cookiecutter.name }}</string>
+	<string>{{ cookiecutter.bundle }}.{{ cookiecutter.app_name }}</string>
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundleName</key>
@@ -30,7 +30,7 @@
 			<key>CFBundleTypeName</key>
 			<string>{{ doctype.description }}</string>
 			<key>CFBundleTypeIconFile</key>
-			<string>{{ cookiecutter.name }}-{{ extension }}.icns</string>
+			<string>{{ cookiecutter.app_name }}-{{ extension }}.icns</string>
 			<key>CFBundleTypeExtensions</key>
 			<array>
 				<string>{{ extension }}</string>
@@ -41,7 +41,7 @@
 			<string>Viewer</string>
 			<key>LSItemContentTypes</key>
 			<array>
-				<string>{{ cookiecutter.bundle }}.{{ cookiecutter.name }}.{{ extension }}</string>
+				<string>{{ cookiecutter.bundle }}.{{ cookiecutter.app_name }}.{{ extension }}</string>
 			</array>
 			<key>LSTypeIsPackage</key>
 			<integer>1</integer>
@@ -53,11 +53,11 @@
 		{% for extension, doctype in cookiecutter.document_types.items() %}
 		<dict>
 			<key>UTTypeIdentifier</key>
-			<string>{{ cookiecutter.bundle }}.{{ cookiecutter.name }}.{{ extension }}</string>
+			<string>{{ cookiecutter.bundle }}.{{ cookiecutter.app_name }}.{{ extension }}</string>
 			<key>UTTypeReferenceURL</key>
 			<string>{{ doctype.url }}</string>
 			<key>UTTypeIconFile</key>
-			<string>{{ cookiecutter.name }}-{{ extension }}.icns</string>
+			<string>{{ cookiecutter.app_name }}-{{ extension }}.icns</string>
 			<key>UTTypeConformsTo</key>
 			<array>
 				<string>com.apple.package</string>
