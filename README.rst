@@ -132,7 +132,7 @@ simple Bash script that starts the python interpreter after setting some
 environment variables. If necessary, you can modify this script.
 
 .. _cookiecutter: https://github.com/cookiecutter/cookiecutter
-.. _Download the Python Apple support package for macOS: https://briefcase-support.s3-us-west-2.amazonaws.com/python/3.5/macOS/Python-3.5-macOS-support.b10.tar.gz
+.. _Download the Python Apple support package for macOS: https://briefcase-support.org/python?platform=macOS&version=3.5
 .. _Python-Apple-support: https://github.com/beeware/Python-Apple-support
 .. _Rubicon: https://github.com/beeware/rubicon-objc
 .. _Toga: https://beeware.org/project/projects/libraries/toga
