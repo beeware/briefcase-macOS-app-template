@@ -1,7 +1,7 @@
 {
-    "app_name": "appname",
-    "module_name": "appname",
     "formal_name": "App Name",
+    "app_name": "{{ cookiecutter.formal_name|lower|replace(' ', '-') }}",
+    "module_name": "{{ cookiecutter.app_name|replace('-', '_') }}",
     "version": "1.0.0",
     "bundle": "com.example",
     "document_types": {}
