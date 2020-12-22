@@ -19,7 +19,7 @@ args = parser.parse_args()
 
 # ---- setup build paths ---------------------------------------------------------------
 
-with open(args.xcode_template_path) as f:
+with open(args.xcode_template_path + '/cookiecutter.json') as f:
     cookiecutter_json = json.load(f)
 
 project_path = Path('project')
