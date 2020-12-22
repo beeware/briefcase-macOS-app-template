@@ -1,0 +1,60 @@
+name: Generate template branches
+on:
+  push:
+    tags:
+    - '*-b*'
+
+jobs:
+  build-templates:
+    runs-on: macos-latest
+    steps:
+    - name: Set build variables
+      env:
+        TAG_NAME: ${{ github.ref }}
+      run: |
+        export TAG=$(basename $TAG_NAME)
+        echo "TAG=${TAG}"
+        export TAG_VERSION="${TAG%-*}"
+        export TAG_BUILD="${TAG#*-}"
+        echo "PY_VERSION=${TAG_VERSION}"
+        echo "BUILD_NUMBER=${TAG_BUILD}"
+        echo "TAG=${TAG}" >> $GITHUB_ENV
+        echo "PY_VERSION=${TAG_VERSION}" >> $GITHUB_ENV
+        echo "BUILD_NUMBER=${TAG_BUILD}" >> $GITHUB_ENV
+    - uses: actions/checkout@v2
+    - name: Set up Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: ${{ env.PY_VERSION }}
+    - name: Install dependencies
+      run: |
+        pip install --upgrade pip
+        pip install --upgrade setuptools
+        pip install --upgrade cookiecutter
+        brew install gh
+    - name: Checkout Xcode template
+      uses: actions/checkout@v2
+      with:
+        repository: 'https://github.com/beeware/briefcase-macOS-Xcode-template'
+        ref: '${{ env.PY_VERSION }}'
+        path: 'briefcase-macOS-Xcode-template'
+    - name: Generate app template
+      run: |
+        python ./scripts/xcode2app.py \
+            --python-version $PY_VERSION \
+            --xcode-template-path briefcase-macOS-Xcode-template
+    - name: Checkout app template branch
+      uses: actions/checkout@v2
+      with:
+        ref: '${{ env.PY_VERSION }}'
+        path: 'app-branch'
+    - name: Push to app branch
+      run: |
+        cd app-branch
+        git ls-files -z | xargs -0 rm -f  # clean all currently tracked files
+        \cp -a ../app-template-build/. ./  # copy over new files
+        git add *
+        git commit -m 'automatic updates from dev'
+        git push --force
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

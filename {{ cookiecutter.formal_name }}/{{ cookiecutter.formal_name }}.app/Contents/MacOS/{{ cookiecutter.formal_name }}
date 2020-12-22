@@ -1,5 +1,0 @@
-#!/bin/bash
-CONTENTS_DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )/.." && pwd )
-export PYTHONPATH="$CONTENTS_DIR/Resources/app":"$CONTENTS_DIR/Resources/app_packages"
-cd "$CONTENTS_DIR/Resources"
-Support/bin/python3 -m {{ cookiecutter.module_name }} "$@"

@@ -1,0 +1,10 @@
+{
+    "formal_name": "App Name",
+    "app_name": "{{ cookiecutter.formal_name|lower|replace(' ', '-') }}",
+    "module_name": "{{ cookiecutter.app_name|replace('-', '_') }}",
+    "version": "1.0.0",
+    "build": "1",
+    "bundle": "com.example",
+    "document_types": {},
+    "_copy_without_render": ["*.py"]
+}
