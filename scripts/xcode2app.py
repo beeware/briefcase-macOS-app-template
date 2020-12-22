@@ -37,13 +37,13 @@ cookiecutter(args.xcode_template_path, output_dir=project_path, no_input=True)
 
 # download support package
 support_package_url_query = [
-    ('platform', 'macos'),
+    ('platform', 'macOS'),
     ('version', args.python_version),
 ]
 support_package_url = 'https://briefcase-support.org/python?{query}'.format(query=urlencode(support_package_url_query))
-tmpfile = project_path / os.path.basename(support_package_url)
+tmpfile = project_path / 'support-download'
 subprocess.run(['curl', '-L', support_package_url, '--output', str(tmpfile)], check=True)
-shutil.unpack_archive(tmpfile, extract_dir=support_path)
+shutil.unpack_archive(tmpfile, extract_dir=support_path, format='tar')
 
 # build project locally
 subprocess.run(
