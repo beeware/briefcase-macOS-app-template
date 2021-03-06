@@ -4,7 +4,7 @@ Briefcase macOS App Template
 A `Cookiecutter <https://github.com/cookiecutter/cookiecutter/>`__ template for
 building Python apps that will run under macOS.
 
-**This repository branch contains a template for Python 3.8**.
+**This repository branch contains a template for Python 3.7**.
 Other Python versions are available by cloning other branches of repository.
 
 Using this template
