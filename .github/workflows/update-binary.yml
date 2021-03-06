@@ -33,7 +33,7 @@ jobs:
         pip install briefcase
     - name: Generate Xcode app template
       run: |
-        cd local
+        cd stub
         briefcase create macOS Xcode
         briefcase build macOS Xcode
         cd ..
