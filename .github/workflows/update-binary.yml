@@ -33,9 +33,15 @@ jobs:
         pip install briefcase
     - name: Generate Xcode app template
       run: |
+        # Genearate the stub app
         cd stub
         briefcase create macOS Xcode
         briefcase build macOS Xcode
+        # Since it's a generic stub binary, we can't provide any meaningful
+        # signing credentials in the Xcode project. Remove the signature from
+        # the stub binary.
+        codesign --remove-signature ./macOS/Xcode/Stub/build/Release/Stub.app/Contents/MacOS/Stub
+        # Move the binary into it's final location
         cd ..
         cp stub/macOS/Xcode/Stub/build/Release/Stub.app/Contents/MacOS/Stub "{{ cookiecutter.formal_name }}/{{ cookiecutter.formal_name }}.app/Contents/MacOS/{{ cookiecutter.formal_name }}"
         git add "{{ cookiecutter.formal_name }}/{{ cookiecutter.formal_name }}.app/Contents/MacOS/{{ cookiecutter.formal_name }}"
