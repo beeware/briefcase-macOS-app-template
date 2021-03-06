@@ -1,0 +1,45 @@
+name: Update binary
+on:
+  push:
+    tags:
+    - '*-b*'
+
+jobs:
+  build-templates:
+    runs-on: macos-latest
+    steps:
+    - name: Set build variables
+      env:
+        TAG_NAME: ${{ github.ref }}
+      run: |
+        export TAG=$(basename $TAG_NAME)
+        echo "TAG=${TAG}"
+        export TAG_VERSION="${TAG%-*}"
+        export TAG_BUILD="${TAG#*-}"
+        echo "PY_VERSION=${TAG_VERSION}"
+        echo "BUILD_NUMBER=${TAG_BUILD}"
+        echo "TAG=${TAG}" >> $GITHUB_ENV
+        echo "PY_VERSION=${TAG_VERSION}" >> $GITHUB_ENV
+        echo "BUILD_NUMBER=${TAG_BUILD}" >> $GITHUB_ENV
+    - uses: actions/checkout@v2
+    - name: Set up Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: ${{ env.PY_VERSION }}
+    - name: Install dependencies
+      run: |
+        pip install --upgrade pip
+        pip install --upgrade setuptools wheel
+        pip install briefcase
+    - name: Generate Xcode app template
+      run: |
+        cd stub
+        briefcase create macOS Xcode
+        briefcase build macOS Xcode
+        cd ..
+        cp stub/macOS/Xcode/Stub/build/Release/Stub.app/Contents/MacOS/Stub "{{ cookiecutter.formal_name }}/{{ cookiecutter.formal_name }}.app/Contents/MacOS/{{ cookiecutter.formal_name }}"
+        git add "{{ cookiecutter.formal_name }}/{{ cookiecutter.formal_name }}.app/Contents/MacOS/{{ cookiecutter.formal_name }}"
+        git commit -m "AUTO: Update app binary for Python ${{ env.PY_VERSION }} build ${{ env.BUILD_NUMBER }}"
+        git push origin HEAD:${{ env.PY_VERSION }}
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

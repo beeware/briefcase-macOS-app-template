@@ -18,10 +18,14 @@
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
 	<string>{{ cookiecutter.version }}</string>
-	<key>CFBundleSignature</key>
-	<string>????</string>
 	<key>CFBundleVersion</key>
-	<string>1</string>
+	<string>{{ cookiecutter.build }}</string>
+	<key>LSMinimumSystemVersion</key>
+	<string>10.12</string>
+	<key>NSPrincipalClass</key>
+	<string>NSApplication</string>
+	<key>MainModule</key>
+	<string>{{ cookiecutter.module_name }}</string>
 	{% if cookiecutter.document_types %}
 	<key>CFBundleDocumentTypes</key>
 	<array>
