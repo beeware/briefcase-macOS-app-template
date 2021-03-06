@@ -40,6 +40,6 @@ jobs:
         cp stub/macOS/Xcode/Stub/build/Release/Stub.app/Contents/MacOS/Stub "{{ cookiecutter.formal_name }}/{{ cookiecutter.formal_name }}.app/Contents/MacOS/{{ cookiecutter.formal_name }}"
         git add "{{ cookiecutter.formal_name }}/{{ cookiecutter.formal_name }}.app/Contents/MacOS/{{ cookiecutter.formal_name }}"
         git commit -m "AUTO: Update app binary for Python ${{ env.PY_VERSION }} build ${{ env.BUILD_NUMBER }}"
-        git push
+        git push origin HEAD:${{ env.PY_VERSION }}
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
