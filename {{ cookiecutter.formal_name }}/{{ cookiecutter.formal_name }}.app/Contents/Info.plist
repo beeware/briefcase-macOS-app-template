@@ -79,5 +79,10 @@
 		{% endfor %}
 	</array>
 	{% endif %}
+    <key>LSEnvironment</key>
+    <dict>
+        <key>LC_CTYPE</key>
+        <string>UTF-8</string>
+    </dict>
 </dict>
 </plist>
