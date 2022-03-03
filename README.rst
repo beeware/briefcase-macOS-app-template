@@ -24,7 +24,7 @@ However, if you *do* want use this template directly...
 
 2. Run ``cookiecutter`` on the template::
 
-    $ cookiecutter https://github.com/beeware/briefcase-macOS-app-template --checkout 3.
+    $ cookiecutter https://github.com/beeware/briefcase-macOS-app-template --checkout 3.8
 
    This will ask you for a number of details of your application, including the
    `name` of your application (which should be a valid PyPI identifier), and
