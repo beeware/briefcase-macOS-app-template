@@ -4,7 +4,7 @@ Briefcase macOS App Template
 A `Cookiecutter <https://github.com/cookiecutter/cookiecutter/>`__ template for
 building Python apps that will run under macOS.
 
-**This repository branch contains a template for Python 3.11**.
+**This repository branch contains a template for Python 3.9**.
 Other Python versions are available by cloning other branches of repository.
 
 Using this template
@@ -24,7 +24,7 @@ However, if you *do* want use this template directly...
 
 2. Run ``cookiecutter`` on the template::
 
-    $ cookiecutter https://github.com/beeware/briefcase-macOS-app-template --checkout 3.11
+    $ cookiecutter https://github.com/beeware/briefcase-macOS-app-template --checkout 3.9
 
    This will ask you for a number of details of your application, including the
    `name` of your application (which should be a valid PyPI identifier), and
@@ -132,7 +132,7 @@ simple Bash script that starts the python interpreter after setting some
 environment variables. If necessary, you can modify this script.
 
 .. _cookiecutter: https://github.com/cookiecutter/cookiecutter
-.. _Download the Python Apple support package for macOS: https://briefcase-support.org/python?platform=macOS&version=3.11
+.. _Download the Python Apple support package for macOS: https://briefcase-support.org/python?platform=macOS&version=3.9
 .. _Python-Apple-support: https://github.com/beeware/Python-Apple-support
 .. _Rubicon: https://github.com/beeware/rubicon-objc
 .. _Toga: https://beeware.org/project/projects/libraries/toga
