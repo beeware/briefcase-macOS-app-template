@@ -69,6 +69,8 @@ jobs:
         path: stub
     - name: Commit stubs
       run: |
+        git config user.email "brutus@beeware.org"
+        git config user.name "Brutus (robot)"
         # Move the binary into it's final location
         mv stub/Stub-* "{{ cookiecutter.formal_name }}/{{ cookiecutter.formal_name }}.app/Contents/MacOS"
         git add "{{ cookiecutter.formal_name }}/{{ cookiecutter.formal_name }}.app/Contents/MacOS"
