@@ -53,18 +53,26 @@ jobs:
     needs: build-stubs
     runs-on: macos-latest
     steps:
+    - name: Set build variables
+      env:
+        TAG_NAME: ${{ github.ref }}
+      run: |
+        export TAG=$(basename $TAG_NAME)
+        echo "TAG=${TAG}"
+        echo "TAG=${TAG}" >> $GITHUB_ENV
     - name: Checkout template
       uses: actions/checkout@v3
     - name: Download Stub artefacts
       uses: actions/download-artifact@v3
       with:
         name: stubs
+        path: stub
     - name: Commit stubs
       run: |
         # Move the binary into it's final location
         mv stub/Stub-* "{{ cookiecutter.formal_name }}/{{ cookiecutter.formal_name }}.app/Contents/MacOS"
         git add "{{ cookiecutter.formal_name }}/{{ cookiecutter.formal_name }}.app/Contents/MacOS"
         git commit -m "AUTO: Update app binaries; build ${{ env.TAG }}"
-        git push origin
+        git push origin HEAD:main
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
