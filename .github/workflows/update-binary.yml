@@ -2,11 +2,16 @@ name: Update binary
 on:
   push:
     tags:
-    - '*-b*'
+    - 'b*'
 
 jobs:
-  build-templates:
+  build-stubs:
+    name: Build stub binaries
     runs-on: macos-latest
+    strategy:
+      max-parallel: 4
+      matrix:
+        python-version: ['3.8', '3.9', '3.10']
     steps:
     - name: Set build variables
       env:
@@ -14,18 +19,13 @@ jobs:
       run: |
         export TAG=$(basename $TAG_NAME)
         echo "TAG=${TAG}"
-        export TAG_VERSION="${TAG%-*}"
-        export TAG_BUILD="${TAG#*-}"
-        echo "PY_VERSION=${TAG_VERSION}"
-        echo "BUILD_NUMBER=${TAG_BUILD}"
         echo "TAG=${TAG}" >> $GITHUB_ENV
-        echo "PY_VERSION=${TAG_VERSION}" >> $GITHUB_ENV
-        echo "BUILD_NUMBER=${TAG_BUILD}" >> $GITHUB_ENV
-    - uses: actions/checkout@v2
-    - name: Set up Python
-      uses: actions/setup-python@v2
+    - name: Checkout template
+      uses: actions/checkout@v3
+    - name: Set up Python ${{ matrix.python-version}}
+      uses: actions/setup-python@v3
       with:
-        python-version: ${{ env.PY_VERSION }}
+        python-version: ${{ matrix.python-version }}
     - name: Install dependencies
       run: |
         pip install --upgrade pip
@@ -33,7 +33,7 @@ jobs:
         pip install briefcase
     - name: Generate Xcode app template
       run: |
-        # Genearate the stub app
+        # Generate the stub app
         cd stub
         briefcase create macOS Xcode
         briefcase build macOS Xcode
@@ -41,11 +41,30 @@ jobs:
         # signing credentials in the Xcode project. Remove the signature from
         # the stub binary.
         codesign --remove-signature ./macOS/Xcode/Stub/build/Release/Stub.app/Contents/MacOS/Stub
+        mv macOS/Xcode/Stub/build/Release/Stub.app/Contents/MacOS/Stub Stub-${{ matrix.python-version }}
+    - name: Upload Stub artefact
+      uses: actions/upload-artifact@v3
+      with:
+        name: stubs
+        path: stub/Stub-${{ matrix.python-version }}
+
+  commit-stubs:
+    name: Commit stub binaries
+    needs: build-stubs
+    runs-on: macos-latest
+    steps:
+    - name: Checkout template
+      uses: actions/checkout@v3
+    - name: Download Stub artefacts
+      uses: actions/download-artifact@v3
+      with:
+        name: stubs
+    - name: Commit stubs
+      run: |
         # Move the binary into it's final location
-        cd ..
-        cp stub/macOS/Xcode/Stub/build/Release/Stub.app/Contents/MacOS/Stub "{{ cookiecutter.formal_name }}/{{ cookiecutter.formal_name }}.app/Contents/MacOS/{{ cookiecutter.formal_name }}"
-        git add "{{ cookiecutter.formal_name }}/{{ cookiecutter.formal_name }}.app/Contents/MacOS/{{ cookiecutter.formal_name }}"
-        git commit -m "AUTO: Update app binary for Python ${{ env.PY_VERSION }} build ${{ env.BUILD_NUMBER }}"
-        git push origin HEAD:${{ env.PY_VERSION }}
+        mv stub/Stub-* "{{ cookiecutter.formal_name }}/{{ cookiecutter.formal_name }}.app/Contents/MacOS"
+        git add "{{ cookiecutter.formal_name }}/{{ cookiecutter.formal_name }}.app/Contents/MacOS"
+        git commit -m "AUTO: Update app binaries; build ${{ env.TAG }}"
+        git push origin
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
