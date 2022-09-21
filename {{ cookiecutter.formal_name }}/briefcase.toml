@@ -2,9 +2,11 @@
 [paths]
 app_path = "{{ cookiecutter.formal_name }}.app/Contents/Resources/app"
 app_packages_path = "{{ cookiecutter.formal_name }}.app/Contents/Resources/app_packages"
-support_path = "{{ cookiecutter.formal_name }}.app/Contents/Resources/Support"
+support_path = "{{ cookiecutter.formal_name }}.app/Contents/Resources/support"
 {{ {"3.8": "support_revision = 9", "3.9": "support_revision = 7", "3.10": "support_revision = 3"}.get(cookiecutter.python_version|py_tag, "") }}
-
+cleanup_paths = [
+    "{{ cookiecutter.formal_name }}.app/Contents/Resources/support/Python.xcframework",
+]
 icon = "{{ cookiecutter.formal_name }}.app/Contents/Resources/{{ cookiecutter.app_name }}.icns"
 {% for extension, doctype in cookiecutter.document_types.items() -%}
 document_type_icon.{{ extension }} = "{{ cookiecutter.formal_name }}.app/Contents/Resources/{{ cookiecutter.app_name }}-{{ extension }}.icns"
