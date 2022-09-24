@@ -2,16 +2,16 @@ name: Update binary
 on:
   push:
     tags:
-    - 'b*'
+    - '*-b*'
 
 jobs:
   build-stubs:
     name: Build stub binaries
-    runs-on: macos-latest
+    runs-on: macos-12
     strategy:
       max-parallel: 4
       matrix:
-        python-version: ['3.8', '3.9', '3.10']
+        python-version: ['3.8', '3.9', '3.10', '3.11.0-alpha - 3.11.0']
     steps:
     - name: Set build variables
       env:
@@ -19,7 +19,13 @@ jobs:
       run: |
         export TAG=$(basename $TAG_NAME)
         echo "TAG=${TAG}"
+        export TAG_VERSION="${TAG%-*}"
+        export TAG_BUILD="${TAG#*-}"
+        echo "BRIEFCASE_VERSION=${TAG_VERSION}"
+        echo "BUILD_NUMBER=${TAG_BUILD}"
         echo "TAG=${TAG}" >> $GITHUB_ENV
+        echo "BRIEFCASE_VERSION=${TAG_VERSION}" >> $GITHUB_ENV
+        echo "BUILD_NUMBER=${TAG_BUILD}" >> $GITHUB_ENV
     - name: Checkout template
       uses: actions/checkout@v3
     - name: Set up Python ${{ matrix.python-version}}
@@ -30,7 +36,12 @@ jobs:
       run: |
         pip install --upgrade pip
         pip install --upgrade setuptools wheel
-        pip install briefcase
+        if [ "${{ env.BRIEFCASE_VERSION }}" == "dev" ]; then
+          # We're on the development template; use development Briefcase
+          pip install git+https://github.com/beeware/briefcase.git
+        else
+          pip install briefcase==${{ env.BRIEFCASE_VERSION }}
+        fi
     - name: Generate Xcode app template
       run: |
         # Generate the stub app
@@ -51,7 +62,7 @@ jobs:
   commit-stubs:
     name: Commit stub binaries
     needs: build-stubs
-    runs-on: macos-latest
+    runs-on: macos-12
     steps:
     - name: Set build variables
       env:
@@ -73,6 +84,8 @@ jobs:
         git config user.name "Brutus (robot)"
         # Move the binary into it's final location
         mv stub/Stub-* "{{ cookiecutter.formal_name }}/{{ cookiecutter.formal_name }}.app/Contents/MacOS"
+        # Ensure the binary is executable
+        chmod 755 "{{ cookiecutter.formal_name }}/{{ cookiecutter.formal_name }}.app/Contents/MacOS"
         git add "{{ cookiecutter.formal_name }}/{{ cookiecutter.formal_name }}.app/Contents/MacOS"
         git commit -m "AUTO: Update app binaries; build ${{ env.TAG }}"
         git push origin HEAD:main
