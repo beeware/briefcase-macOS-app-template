@@ -90,8 +90,10 @@ jobs:
         # Move the binary into it's final location
         mv stub/Stub-* "{{ cookiecutter.formal_name }}/{{ cookiecutter.formal_name }}.app/Contents/MacOS"
         # Ensure the binary is executable
-        chmod 755 "{{ cookiecutter.formal_name }}/{{ cookiecutter.formal_name }}.app/Contents/MacOS"
-        git add "{{ cookiecutter.formal_name }}/{{ cookiecutter.formal_name }}.app/Contents/MacOS"
+        cd "{{ cookiecutter.formal_name }}/{{ cookiecutter.formal_name }}.app/Contents/MacOS"
+        chmod 755 Stub-*
+        # Commit changes
+        git add ./Stub-*
         git commit -m "AUTO: Update app binaries; build ${{ env.TAG }}"
         git push origin HEAD:main
       env:
