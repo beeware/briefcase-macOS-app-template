@@ -18,14 +18,19 @@ jobs:
         TAG_NAME: ${{ github.ref }}
       run: |
         export TAG=$(basename $TAG_NAME)
+        export PYTHON_TAG=$(python -c "print('.'.join('${{ matrix.python-version }}'.split('.')[:2]))")
+        export BRIEFCASE_VERSION="${TAG%-*}"
+        export BUILD_NUMBER="${TAG#*-}"
+
         echo "TAG=${TAG}"
-        export TAG_VERSION="${TAG%-*}"
-        export TAG_BUILD="${TAG#*-}"
-        echo "BRIEFCASE_VERSION=${TAG_VERSION}"
-        echo "BUILD_NUMBER=${TAG_BUILD}"
+        echo "PYTHON_TAG=${PYTHON_TAG}"
+        echo "BRIEFCASE_VERSION=${BRIEFCASE_VERSION}"
+        echo "BUILD_NUMBER=${BUILD_NUMBER}"
+
         echo "TAG=${TAG}" >> $GITHUB_ENV
-        echo "BRIEFCASE_VERSION=${TAG_VERSION}" >> $GITHUB_ENV
-        echo "BUILD_NUMBER=${TAG_BUILD}" >> $GITHUB_ENV
+        echo "PYTHON_TAG=${PYTHON_TAG}" >> $GITHUB_ENV
+        echo "BRIEFCASE_VERSION=${BRIEFCASE_VERSION}" >> $GITHUB_ENV
+        echo "BUILD_NUMBER=${BUILD_NUMBER}" >> $GITHUB_ENV
     - name: Checkout template
       uses: actions/checkout@v3
     - name: Set up Python ${{ matrix.python-version}}
@@ -52,12 +57,12 @@ jobs:
         # signing credentials in the Xcode project. Remove the signature from
         # the stub binary.
         codesign --remove-signature ./macOS/Xcode/Stub/build/Release/Stub.app/Contents/MacOS/Stub
-        mv macOS/Xcode/Stub/build/Release/Stub.app/Contents/MacOS/Stub Stub-${{ matrix.python-version }}
+        mv macOS/Xcode/Stub/build/Release/Stub.app/Contents/MacOS/Stub Stub-${{ env.PYTHON_TAG }}
     - name: Upload Stub artefact
       uses: actions/upload-artifact@v3
       with:
         name: stubs
-        path: stub/Stub-${{ matrix.python-version }}
+        path: stub/Stub-${{ env.PYTHON_TAG }}
 
   commit-stubs:
     name: Commit stub binaries
