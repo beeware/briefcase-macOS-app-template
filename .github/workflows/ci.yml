@@ -1,0 +1,61 @@
+name: CI
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+  workflow_call:
+
+env:
+  python_version: "3.9"
+
+defaults:
+  run:
+    shell: bash # https://github.com/beeware/briefcase/pull/912
+
+jobs:
+  verify-apps:
+    name: Build apps
+    strategy:
+      matrix:
+        os_name: ["macOS"]
+        framework: ["toga", "pyside2", "pyside6", "ppb"]
+        include:
+          - os_name: macOS
+            platform: macos-12
+            briefcase-data-dir: ~/Library/Caches/org.beeware.briefcase
+            pip-cache-dir: ~/Library/Caches/pip
+            docker-cache-dir: ~/Library/Containers/com.docker.docker/Data/vms/0/
+
+    runs-on: ${{ matrix.platform }}
+    steps:
+      - name: Cache Briefcase tools
+        uses: actions/cache@v3.0.11
+        with:
+          key: briefcase-${{ matrix.platform }}
+          path: |
+            ~/.cookiecutters
+            ${{ matrix.briefcase-data-dir }}
+            ${{ matrix.pip-cache-dir }}
+            ${{ matrix.docker-cache-dir }}
+      - uses: actions/checkout@v3.1.0
+        with:
+          fetch-depth: 0
+      - name: Set up Python
+        uses: actions/setup-python@v4.3.0
+        with:
+          python-version: ${{ env.python_version }}
+      - name: Install packages
+        run: pip install briefcase
+      - name: Build App
+        run: |
+          cd tests/apps/verify-${{ matrix.framework }}
+          briefcase create
+          briefcase build
+          briefcase package --adhoc-sign
+      - uses: actions/upload-artifact@v3
+        name: Upload failure
+        if: failure()
+        with:
+          name: build-failure-logs-${{ matrix.framework }}
+          path: tests/apps/verify-${{ matrix.framework }}/logs/*
