@@ -74,8 +74,27 @@ jobs:
         TAG_NAME: ${{ github.ref }}
       run: |
         export TAG=$(basename $TAG_NAME)
+        export BRIEFCASE_VERSION="${TAG%-*}"
+        export BUILD_NUMBER="${TAG#*-}"
+
         echo "TAG=${TAG}"
+        echo "PYTHON_TAG=${PYTHON_TAG}"
+        echo "BRIEFCASE_VERSION=${BRIEFCASE_VERSION}"
+        echo "BUILD_NUMBER=${BUILD_NUMBER}"
+
         echo "TAG=${TAG}" >> $GITHUB_ENV
+        echo "PYTHON_TAG=${PYTHON_TAG}" >> $GITHUB_ENV
+        echo "BRIEFCASE_VERSION=${BRIEFCASE_VERSION}" >> $GITHUB_ENV
+        echo "BUILD_NUMBER=${BUILD_NUMBER}" >> $GITHUB_ENV
+
+        if [ "${{ env.BRIEFCASE_VERSION }}" == "dev" ]; then
+          # We're on the development template; push to main
+          echo "TEMPLATE_BRANCH=main"
+          echo "TEMPLATE_BRANCH=main" >> $GITHUB_ENV
+        else
+          echo "TEMPLATE_BRANCH=v${BRIEFCASE_VERSION}"
+          echo "TEMPLATE_BRANCH=v${BRIEFCASE_VERSION}" >> $GITHUB_ENV
+        fi
     - name: Checkout template
       uses: actions/checkout@v3
     - name: Download Stub artefacts
@@ -94,7 +113,7 @@ jobs:
         chmod 755 Stub-*
         # Commit changes
         git add ./Stub-*
-        git commit -m "AUTO: Update app binaries; build ${{ env.TAG }}"
-        git push origin HEAD:main
+        git commit -m "AUTO: Update app binaries; build ${{ env.BUILD_NUMBER }}"
+        git push origin HEAD:${{ env.TEMPLATE_BRANCH }}
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
