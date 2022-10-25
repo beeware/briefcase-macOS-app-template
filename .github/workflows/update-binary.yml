@@ -87,7 +87,7 @@ jobs:
         echo "BRIEFCASE_VERSION=${BRIEFCASE_VERSION}" >> $GITHUB_ENV
         echo "BUILD_NUMBER=${BUILD_NUMBER}" >> $GITHUB_ENV
 
-        if [ "${{ env.BRIEFCASE_VERSION }}" == "dev" ]; then
+        if [ "${BRIEFCASE_VERSION}" == "dev" ]; then
           # We're on the development template; push to main
           echo "TEMPLATE_BRANCH=main"
           echo "TEMPLATE_BRANCH=main" >> $GITHUB_ENV
@@ -113,7 +113,7 @@ jobs:
         chmod 755 Stub-*
         # Commit changes
         git add ./Stub-*
-        git commit -m "AUTO: Update app binaries; build ${{ env.BUILD_NUMBER }}"
+        git commit -m "AUTO: Update app binaries; build ${{ env.TAG }}"
         git push origin HEAD:${{ env.TEMPLATE_BRANCH }}
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
