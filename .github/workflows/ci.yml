@@ -14,6 +14,7 @@ jobs:
   verify-apps:
     name: Build apps
     strategy:
+      fail-fast: false
       matrix:
         python_version: ["3.8", "3.9", "3.10", "3.11"]
         framework: ["toga", "pyside2", "pyside6", "ppb"]
@@ -22,6 +23,12 @@ jobs:
             briefcase-data-dir: ~/Library/Caches/org.beeware.briefcase
             pip-cache-dir: ~/Library/Caches/pip
             docker-cache-dir: ~/Library/Containers/com.docker.docker/Data/vms/0/
+
+        exclude:
+          # PySide2 doesn't publish a binary wheel that is compatible
+          # with Python 3.11, and is unlikely to ever do so.
+          - python_version: "3.11"
+            framework: "pyside2"
 
     runs-on: ${{ matrix.platform }}
     steps:
