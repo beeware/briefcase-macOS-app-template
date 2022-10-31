@@ -6,9 +6,6 @@ on:
       - main
   workflow_call:
 
-env:
-  python_version: "3.9"
-
 defaults:
   run:
     shell: bash # https://github.com/beeware/briefcase/pull/912
@@ -17,22 +14,28 @@ jobs:
   verify-apps:
     name: Build apps
     strategy:
+      fail-fast: false
       matrix:
-        os_name: ["macOS"]
+        python_version: ["3.8", "3.9", "3.10", "3.11"]
         framework: ["toga", "pyside2", "pyside6", "ppb"]
         include:
-          - os_name: macOS
-            platform: macos-12
+          - platform: macos-12
             briefcase-data-dir: ~/Library/Caches/org.beeware.briefcase
             pip-cache-dir: ~/Library/Caches/pip
             docker-cache-dir: ~/Library/Containers/com.docker.docker/Data/vms/0/
+
+        exclude:
+          # PySide2 doesn't publish a binary wheel that is compatible
+          # with Python 3.11, and is unlikely to ever do so.
+          - python_version: "3.11"
+            framework: "pyside2"
 
     runs-on: ${{ matrix.platform }}
     steps:
       - name: Cache Briefcase tools
         uses: actions/cache@v3.0.11
         with:
-          key: briefcase-${{ matrix.platform }}
+          key: briefcase-${{ matrix.platform }}-${{ matrix.python_version }}
           path: |
             ~/.cookiecutters
             ${{ matrix.briefcase-data-dir }}
@@ -44,7 +47,7 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v4.3.0
         with:
-          python-version: ${{ env.python_version }}
+          python-version: ${{ matrix.python_version }}
       - name: Install packages
         run: pip install briefcase
       - name: Build App

@@ -17,8 +17,8 @@ requires = [
 
 
 [tool.briefcase.app.verify-toga.macOS]
-template = "../../.."
 requires = [
     'toga-cocoa>=0.3.0.dev38',
     'std-nslog~=1.0.0'
 ]
+template = "../../.."

@@ -17,7 +17,7 @@ requires = [
 ]
 
 [tool.briefcase.app.verify-ppb.macOS]
-template = "../../.."
 requires = [
     'std-nslog~=1.0.0'
 ]
+template = "../../.."

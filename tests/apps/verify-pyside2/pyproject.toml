@@ -18,7 +18,7 @@ requires = [
 
 
 [tool.briefcase.app.verify-pyside2.macOS]
-template = "../../.."
 requires = [
     'std-nslog~=1.0.0'
 ]
+template = "../../.."
