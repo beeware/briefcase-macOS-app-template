@@ -9,7 +9,6 @@ jobs:
     name: Build stub binaries
     runs-on: macos-12
     strategy:
-      max-parallel: 4
       matrix:
         python-version: ['3.8', '3.9', '3.10', '3.11']
     steps:
@@ -33,30 +32,29 @@ jobs:
         echo "BUILD_NUMBER=${BUILD_NUMBER}" >> $GITHUB_ENV
     - name: Checkout template
       uses: actions/checkout@v3
-    - name: Set up Python ${{ matrix.python-version}}
-      uses: actions/setup-python@v3
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v4.3.0
       with:
         python-version: ${{ matrix.python-version }}
     - name: Install dependencies
       run: |
-        pip install --upgrade pip
-        pip install --upgrade setuptools wheel
+        python -m pip install --upgrade pip
         if [ "${{ env.BRIEFCASE_VERSION }}" == "dev" ]; then
           # We're on the development template; use development Briefcase
-          pip install git+https://github.com/beeware/briefcase.git
+          python -m pip install git+https://github.com/beeware/briefcase.git
         else
-          pip install briefcase==${{ env.BRIEFCASE_VERSION }}
+          python -m pip install briefcase==${{ env.BRIEFCASE_VERSION }}
         fi
     - name: Generate Xcode app template
       run: |
         # Generate the stub app
         cd stub
-        briefcase create macOS Xcode
         briefcase build macOS Xcode
         # Since it's a generic stub binary, we can't provide any meaningful
         # signing credentials in the Xcode project. Remove the signature from
         # the stub binary.
         codesign --remove-signature ./macOS/Xcode/Stub/build/Release/Stub.app/Contents/MacOS/Stub
+        echo "Move the binary into the final location"
         mv macOS/Xcode/Stub/build/Release/Stub.app/Contents/MacOS/Stub Stub-${{ env.PYTHON_TAG }}
     - name: Upload Stub artefact
       uses: actions/upload-artifact@v3
