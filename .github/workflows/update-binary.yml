@@ -105,9 +105,9 @@ jobs:
         git config user.email "brutus@beeware.org"
         git config user.name "Brutus (robot)"
         # Move the binary into it's final location
-        mv stub/Stub-* "{{ cookiecutter.formal_name }}/{{ cookiecutter.formal_name }}.app/Contents/MacOS"
+        mv stub/Stub-* "{{ cookiecutter.format }}/{{ cookiecutter.formal_name }}.app/Contents/MacOS"
         # Ensure the binary is executable
-        cd "{{ cookiecutter.formal_name }}/{{ cookiecutter.formal_name }}.app/Contents/MacOS"
+        cd "{{ cookiecutter.format }}/{{ cookiecutter.formal_name }}.app/Contents/MacOS"
         chmod 755 Stub-*
         # Commit changes
         git add ./Stub-*
