@@ -31,7 +31,7 @@ jobs:
         echo "BRIEFCASE_VERSION=${BRIEFCASE_VERSION}" >> $GITHUB_ENV
         echo "BUILD_NUMBER=${BUILD_NUMBER}" >> $GITHUB_ENV
     - name: Checkout template
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
     - name: Set up Python ${{ matrix.python-version }}
       uses: actions/setup-python@v4.6.1
       with:
@@ -94,7 +94,7 @@ jobs:
           echo "TEMPLATE_BRANCH=v${BRIEFCASE_VERSION}" >> $GITHUB_ENV
         fi
     - name: Checkout template
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
     - name: Download Stub artefacts
       uses: actions/download-artifact@v3
       with:
