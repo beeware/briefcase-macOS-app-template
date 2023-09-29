@@ -6,13 +6,15 @@ info_plist_path = "{{ cookiecutter.formal_name }}.app/Contents/Info.plist"
 entitlements_path = "Entitlements.plist"
 support_path = "{{ cookiecutter.formal_name }}.app/Contents/Resources/support"
 {{ {
-    "3.8": "support_revision = 12",
-    "3.9": "support_revision = 10",
-    "3.10": "support_revision = 6",
-    "3.11": "support_revision = 1",
+    "3.8": "support_revision = 13",
+    "3.9": "support_revision = 11",
+    "3.10": "support_revision = 7",
+    "3.11": "support_revision = 2",
+    "3.12": "support_revision = 0",
 }.get(cookiecutter.python_version|py_tag, "") }}
 cleanup_paths = [
     "{{ cookiecutter.formal_name }}.app/Contents/Resources/support/Python.xcframework",
+    "{{ cookiecutter.formal_name }}.app/Contents/Resources/support/platform-site",
 ]
 icon = "{{ cookiecutter.formal_name }}.app/Contents/Resources/{{ cookiecutter.app_name }}.icns"
 {% for extension, doctype in cookiecutter.document_types.items() -%}
