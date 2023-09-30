@@ -2,4 +2,5 @@
 .python-version
 .vscode
 .idea
-stub/macOS
+stub/build
+stub/dist

@@ -53,9 +53,9 @@ jobs:
         # Since it's a generic stub binary, we can't provide any meaningful
         # signing credentials in the Xcode project. Remove the signature from
         # the stub binary.
-        codesign --remove-signature ./macOS/Xcode/Stub/build/Release/Stub.app/Contents/MacOS/Stub
+        codesign --remove-signature ./build/stub/macos/xcode/build/Release/Stub.app/Contents/MacOS/Stub
         echo "Move the binary into the final location"
-        mv macOS/Xcode/Stub/build/Release/Stub.app/Contents/MacOS/Stub Stub-${{ env.PYTHON_TAG }}
+        mv ./build/stub/macos/xcode/build/Release/Stub.app/Contents/MacOS/Stub Stub-${{ env.PYTHON_TAG }}
     - name: Upload Stub artefact
       uses: actions/upload-artifact@v3
       with:
