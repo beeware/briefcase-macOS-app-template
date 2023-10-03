@@ -39,3 +39,11 @@ jobs:
             framework: "pyside2"
           - python-version: "3.12-dev"
             framework: "pyside2"
+          # PySide6 hasn't published a binary wheel that is compatible
+          # with Python 3.12 yet.
+          - python-version: "3.12-dev"
+            framework: "pyside6"
+          # Pygame hasn't published a binary wheel that is compatible
+          # with Python 3.12 yet.
+          - python-version: "3.12-dev"
+            framework: "pygame"

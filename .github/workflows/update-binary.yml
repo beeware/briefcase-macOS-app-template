@@ -65,7 +65,7 @@ jobs:
   commit-stubs:
     name: Commit stub binaries
     needs: build-stubs
-    runs-on: macos-12
+    runs-on: macos-latest
     steps:
     - name: Set build variables
       env:
