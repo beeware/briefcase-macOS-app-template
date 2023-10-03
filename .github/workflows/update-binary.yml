@@ -7,10 +7,10 @@ on:
 jobs:
   build-stubs:
     name: Build stub binaries
-    runs-on: macos-12
+    runs-on: macos-latest
     strategy:
       matrix:
-        python-version: ["3.8", "3.9", "3.10", "3.11"]
+        python-version: ["3.8", "3.9", "3.10", "3.11", "3.12"]
     steps:
     - name: Set build variables
       env:
