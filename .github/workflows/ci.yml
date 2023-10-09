@@ -31,14 +31,11 @@ jobs:
       fail-fast: false
       matrix:
         python-version: [ "3.8", "3.9", "3.10", "3.11", "3.12" ]
-        framework: [ "toga", "pyside2", "pyside6", "ppb", "pygame" ]
+        # PySide2 doesn't publish a binary wheel that is compatible
+        # with Python 3.11+, and doesn't publish *any* universal or ARM64 wheels,
+        # and is unlikely to ever do so, so we can't test pyside2.
+        framework: [ "toga", "pyside6", "ppb", "pygame" ]
         exclude:
-          # PySide2 doesn't publish a binary wheel that is compatible
-          # with Python 3.11+, and is unlikely to ever do so.
-          - python-version: "3.11"
-            framework: "pyside2"
-          - python-version: "3.12"
-            framework: "pyside2"
           # PySide6 hasn't published a binary wheel that is compatible
           # with Python 3.12 yet.
           - python-version: "3.12"
