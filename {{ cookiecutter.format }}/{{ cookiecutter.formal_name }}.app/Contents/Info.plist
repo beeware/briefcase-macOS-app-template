@@ -21,7 +21,7 @@
 	<key>CFBundleVersion</key>
 	<string>{{ cookiecutter.build }}</string>
 	<key>LSMinimumSystemVersion</key>
-	<string>10.12</string>
+	<string>11.0</string>
 	<key>NSPrincipalClass</key>
 	<string>NSApplication</string>
 	<key>MainModule</key>
