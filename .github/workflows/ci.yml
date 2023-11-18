@@ -28,8 +28,7 @@ jobs:
   verify-apps:
     name: Build apps
     needs: pre-commit
-#    uses: beeware/.github/.github/workflows/app-build-verify.yml@main
-    uses: rmartin16/.github-beeware/.github/workflows/app-build-verify.yml@create-new-project
+    uses: beeware/.github/.github/workflows/app-build-verify.yml@main
     with:
       python-version: ${{ matrix.python-version }}
       runner-os: macos-latest
