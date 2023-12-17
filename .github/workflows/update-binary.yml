@@ -57,7 +57,7 @@ jobs:
         echo "Move the binary into the final location"
         mv ./build/stub/macos/xcode/build/Release/Stub.app/Contents/MacOS/Stub Stub-${{ env.PYTHON_TAG }}
     - name: Upload Stub artefact
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: stubs
         path: stub/Stub-${{ env.PYTHON_TAG }}
