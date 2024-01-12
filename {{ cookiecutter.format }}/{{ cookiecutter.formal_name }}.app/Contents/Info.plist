@@ -79,8 +79,8 @@
 		{% endfor %}
 	</array>
 	{% endif %}
-{%- if cookiecutter.permissions -%}
-	{%- for permission, value in cookiecutter.permissions.items() %}
+{%- if cookiecutter.info -%}
+	{%- for permission, value in cookiecutter.info.items() %}
 	<key>{{ permission }}</key>
 	{{ value|plist_value }}
 	{%- endfor -%}
