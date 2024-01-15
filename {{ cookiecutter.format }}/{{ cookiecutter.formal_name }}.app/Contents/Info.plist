@@ -79,11 +79,5 @@
 		{% endfor %}
 	</array>
 	{% endif %}
-{%- if cookiecutter.info -%}
-	{%- for permission, value in cookiecutter.info.items() %}
-	<key>{{ permission }}</key>
-	{{ value|plist_value }}
-	{%- endfor -%}
-{%- endif %}
 </dict>
 </plist>
