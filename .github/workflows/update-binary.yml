@@ -27,7 +27,7 @@ jobs:
         echo "BUILD_NUMBER=${BUILD_NUMBER}" | tee -a $GITHUB_ENV
 
     - name: Checkout Template
-      uses: actions/checkout@v4.1.1
+      uses: actions/checkout@v4.1.2
 
     - name: Setup Python ${{ matrix.python-version }}
       uses: actions/setup-python@v5.0.0
@@ -95,7 +95,7 @@ jobs:
         fi
 
     - name: Checkout Template
-      uses: actions/checkout@v4.1.1
+      uses: actions/checkout@v4.1.2
 
     - name: Download Stub Artefacts
       uses: actions/download-artifact@v4.1.4
