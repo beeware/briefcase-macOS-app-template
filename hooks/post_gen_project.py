@@ -1,12 +1,16 @@
-import os
 from pathlib import Path
 
 
 BIN_PATH = Path("{{ cookiecutter.formal_name }}.app/Contents/MacOS")
 
-# Move the stub for the Python version into the final location
-os.rename(BIN_PATH / 'Stub-{{ cookiecutter.python_version|py_tag }}', BIN_PATH / '{{ cookiecutter.formal_name }}')
+# Rename the stub binary we want to "Stub""
+STUB_PATH = (
+    BIN_PATH
+    / "{% if cookiecutter.console_app %}Console{% else %}GUI{% endif %}-Stub-{{ cookiecutter.python_version|py_tag }}"
+)
+STUB_PATH.rename(BIN_PATH / "Stub")
 
-# Delete all remaining stubs
-for stub in BIN_PATH.glob("Stub-*"):
-    os.unlink(stub)
+# Delete all stubs that aren't for the Python version and app type
+# that we are targeting
+for stub in BIN_PATH.glob("*-Stub-*"):
+    stub.unlink()

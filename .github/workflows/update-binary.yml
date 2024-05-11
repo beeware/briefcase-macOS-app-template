@@ -49,18 +49,20 @@ jobs:
         # Generate the stub app
         cd stub
         briefcase build macOS Xcode
-        # Since it's a generic stub binary, we can't provide any meaningful
-        # signing credentials in the Xcode project. Remove the signature from
-        # the stub binary.
-        codesign --remove-signature ./build/stub/macos/xcode/build/Release/Stub.app/Contents/MacOS/Stub
-        echo "Move the binary into the final location"
-        mv ./build/stub/macos/xcode/build/Release/Stub.app/Contents/MacOS/Stub Stub-${{ env.PYTHON_TAG }}
+        # Since the project is producing generic stub binary, we can't provide
+        # any meaningful signing credentials in the Xcode project. Remove the
+        # signature from the stub binaries.
+        codesign --remove-signature "./build/console-stub/macos/xcode/build/Release/Console Stub.app/Contents/MacOS/Console Stub"
+        codesign --remove-signature "./build/gui-stub/macos/xcode/build/Release/GUI Stub.app/Contents/MacOS/GUI Stub"
+        echo "Move the binaries into the final location"
+        mv "./build/console-stub/macos/xcode/build/Release/Console Stub.app/Contents/MacOS/Console Stub" Console-Stub-${{ env.PYTHON_TAG }}
+        mv "./build/gui-stub/macos/xcode/build/Release/GUI Stub.app/Contents/MacOS/GUI Stub" GUI-Stub-${{ env.PYTHON_TAG }}
 
     - name: Upload Stub Artefact
       uses: actions/upload-artifact@v4.3.3
       with:
         name: stub-${{ matrix.python-version }}
-        path: stub/Stub-${{ env.PYTHON_TAG }}
+        path: stub/*-Stub-${{ env.PYTHON_TAG }}
 
   commit-stubs:
     name: Commit stub binaries
@@ -75,23 +77,15 @@ jobs:
         export BRIEFCASE_VERSION="${TAG%-*}"
         export BUILD_NUMBER="${TAG#*-}"
 
-        echo "TAG=${TAG}"
-        echo "PYTHON_TAG=${PYTHON_TAG}"
-        echo "BRIEFCASE_VERSION=${BRIEFCASE_VERSION}"
-        echo "BUILD_NUMBER=${BUILD_NUMBER}"
-
-        echo "TAG=${TAG}" >> $GITHUB_ENV
-        echo "PYTHON_TAG=${PYTHON_TAG}" >> $GITHUB_ENV
-        echo "BRIEFCASE_VERSION=${BRIEFCASE_VERSION}" >> $GITHUB_ENV
-        echo "BUILD_NUMBER=${BUILD_NUMBER}" >> $GITHUB_ENV
+        echo "TAG=${TAG}" | tee -a $GITHUB_ENV
+        echo "BRIEFCASE_VERSION=${BRIEFCASE_VERSION}" | tee -a $GITHUB_ENV
+        echo "BUILD_NUMBER=${BUILD_NUMBER}" | tee -a $GITHUB_ENV
 
         if [ "${BRIEFCASE_VERSION}" == "dev" ]; then
           # We're on the development template; push to main
-          echo "TEMPLATE_BRANCH=main"
-          echo "TEMPLATE_BRANCH=main" >> $GITHUB_ENV
+          echo "TEMPLATE_BRANCH=main" | tee -a $GITHUB_ENV
         else
-          echo "TEMPLATE_BRANCH=v${BRIEFCASE_VERSION}"
-          echo "TEMPLATE_BRANCH=v${BRIEFCASE_VERSION}" >> $GITHUB_ENV
+          echo "TEMPLATE_BRANCH=v${BRIEFCASE_VERSION}" | tee -a $GITHUB_ENV
         fi
 
     - name: Checkout Template
@@ -109,12 +103,12 @@ jobs:
         git config user.email "brutus@beeware.org"
         git config user.name "Brutus (robot)"
         # Move the binary into it's final location
-        mv stub/Stub-* "{{ cookiecutter.format }}/{{ cookiecutter.formal_name }}.app/Contents/MacOS"
+        mv stub/*-Stub-* "{{ cookiecutter.format }}/{{ cookiecutter.formal_name }}.app/Contents/MacOS"
         # Ensure the binary is executable
         cd "{{ cookiecutter.format }}/{{ cookiecutter.formal_name }}.app/Contents/MacOS"
-        chmod 755 Stub-*
+        chmod 755 *-Stub-*
         # Commit changes
-        git add ./Stub-*
+        git add ./*-Stub-*
         git commit -m "AUTO: Update app binaries; build ${{ env.TAG }}"
         git push origin HEAD:${{ env.TEMPLATE_BRANCH }}
       env:
