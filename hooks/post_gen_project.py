@@ -19,3 +19,7 @@ ENTITLEMENTS_PATH = Path("Entitlements.plist")
 # This implicitly uses "universal" newlines mode.
 xml_content = ENTITLEMENTS_PATH.read_text()
 ENTITLEMENTS_PATH.open('w', newline='\n').write(xml_content)
+
+INFO_PATH = BIN_PATH.parent / 'Info.plist'
+info_content = INFO_PATH.read_text()
+INFO_PATH.open('w', newline='\n').write(info_content)
