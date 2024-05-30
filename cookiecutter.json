@@ -1,0 +1,18 @@
+{
+    "format": "app",
+    "formal_name": "App Name",
+    "app_name": "{{ cookiecutter.formal_name|lower|replace(' ', '-') }}",
+    "module_name": "{{ cookiecutter.app_name|replace('-', '_') }}",
+    "info": "",
+    "entitlements": "",
+    "document_types": "",
+    "console_app": false,
+    "version": "1.0.0",
+    "build": "1",
+    "bundle": "com.example",
+    "python_version": "3.X.0",
+    "_extensions": [
+        "briefcase.integrations.cookiecutter.PythonVersionExtension",
+        "briefcase.integrations.cookiecutter.PListExtension"
+    ]
+}

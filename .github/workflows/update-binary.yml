@@ -1,0 +1,84 @@
+name: Update binary
+on:
+  push:
+    tags:
+    - '*-b*'
+
+jobs:
+  build-stubs:
+    name: Build stub binaries
+    runs-on: macos-latest
+    strategy:
+      matrix:
+        python-version: [ "3.8", "3.9", "3.10", "3.11", "3.12" ]
+    steps:
+    - name: Set Build Variables
+      env:
+        TAG_NAME: ${{ github.ref }}
+      run: |
+        export TAG=$(basename $TAG_NAME)
+        export PYTHON_TAG=$(python -c "print('.'.join('${{ matrix.python-version }}'.split('.')[:2]))")
+        export BRIEFCASE_VERSION="${TAG%-*}"
+        export BUILD_NUMBER="${TAG#*-}"
+
+        echo "TAG=${TAG}" | tee -a $GITHUB_ENV
+        echo "PYTHON_TAG=${PYTHON_TAG}" | tee -a $GITHUB_ENV
+        echo "BRIEFCASE_VERSION=${BRIEFCASE_VERSION}" | tee -a $GITHUB_ENV
+        echo "BUILD_NUMBER=${BUILD_NUMBER}" | tee -a $GITHUB_ENV
+
+    - name: Checkout Template
+      uses: actions/checkout@v4.1.6
+
+    - name: Setup Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v5.1.0
+      with:
+        python-version: ${{ matrix.python-version }}
+
+    - name: Install Dependencies
+      run: |
+        python -m pip install --upgrade pip
+        if [ "${{ env.BRIEFCASE_VERSION }}" == "dev" ]; then
+          # We're on the development template; use development Briefcase
+          python -m pip install git+https://github.com/beeware/briefcase.git
+        else
+          python -m pip install briefcase==${{ env.BRIEFCASE_VERSION }}
+        fi
+
+    - name: Generate Xcode App Template
+      run: |
+        # Generate the stub app
+        cd stub
+        briefcase build macOS Xcode
+
+        echo "Gather compiled binaries"
+        mv "./build/console-stub/macos/xcode/build/Release/Console Stub.app/Contents/MacOS/Console Stub" Console-Stub
+        mv "./build/gui-stub/macos/xcode/build/Release/GUI Stub.app/Contents/MacOS/GUI Stub" GUI-Stub
+
+        echo "Strip signatures"
+        # Since the project is producing generic stub binary, we can't provide
+        # any meaningful signing credentials in the Xcode project. Remove the
+        # signature from the stub binaries.
+        codesign --remove-signature Console-Stub
+        codesign --remove-signature GUI-Stub
+
+        echo "Compress distribution artefacts"
+        zip Console-Stub-${{ env.PYTHON_TAG }}-${{ steps.build-vars.outputs.BUILD_NUMBER }}.zip Console-Stub
+        zip GUI-Stub-${{ env.PYTHON_TAG }}-${{ steps.build-vars.outputs.BUILD_NUMBER }}.zip GUI-Stub
+
+    - name: Upload Stub Artefact to Release
+      uses: actions/upload-artifact@v4.3.3
+      with:
+        name: stub-${{ env.PYTHON_TAG }}-${{ steps.build-vars.outputs.BUILD_NUMBER }}
+        path: stub/*-Stub
+
+    - name: Upload Release Asset to S3
+      env:
+        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      run: |
+        python -m pip install -U pip
+        python -m pip install -U setuptools
+        python -m pip install awscli
+
+        aws s3 cp stub/Console-Stub-${{ env.PYTHON_TAG }}-${{ steps.build-vars.outputs.BUILD_NUMBER }}.zip s3://briefcase-support/python/${{ steps.build-vars.outputs.PY_VERSION }}/macOS/Console-Stub-${{ env.PYTHON_TAG }}-${{ steps.build-vars.outputs.BUILD_NUMBER }}.zip
+        aws s3 cp stub/GUI-Stub-${{ env.PYTHON_TAG }}-${{ steps.build-vars.outputs.BUILD_NUMBER }}.zip s3://briefcase-support/python/${{ steps.build-vars.outputs.PY_VERSION }}/macOS/GUI-Stub-${{ env.PYTHON_TAG }}-${{ steps.build-vars.outputs.BUILD_NUMBER }}.zip

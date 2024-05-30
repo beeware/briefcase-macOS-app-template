@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CFBundleDevelopmentRegion</key>
+	<string>en</string>
+	<key>CFBundleExecutable</key>
+	<string>{{ cookiecutter.formal_name }}</string>
+	<key>CFBundleIconFile</key>
+	<string>{{ cookiecutter.app_name }}.icns</string>
+	<key>CFBundleIdentifier</key>
+	<string>{{ cookiecutter.bundle }}.{{ cookiecutter.app_name }}</string>
+	<key>CFBundleInfoDictionaryVersion</key>
+	<string>6.0</string>
+	<key>CFBundleName</key>
+	<string>{{ cookiecutter.formal_name }}</string>
+	<key>CFBundlePackageType</key>
+	<string>APPL</string>
+	<key>CFBundleShortVersionString</key>
+	<string>{{ cookiecutter.version }}</string>
+	<key>CFBundleVersion</key>
+	<string>{{ cookiecutter.build }}</string>
+	<key>LSMinimumSystemVersion</key>
+	<string>11.0</string>
+	<key>NSPrincipalClass</key>
+	<string>NSApplication</string>
+	<key>MainModule</key>
+	<string>{{ cookiecutter.module_name }}</string>
+	{% if cookiecutter.document_types %}
+	<key>CFBundleDocumentTypes</key>
+	<array>
+		{% for extension, doctype in cookiecutter.document_types.items() %}
+		<dict>
+			<key>CFBundleTypeName</key>
+			<string>{{ doctype.description }}</string>
+			<key>CFBundleTypeIconFile</key>
+			<string>{{ cookiecutter.app_name }}-{{ extension }}.icns</string>
+			<key>CFBundleTypeExtensions</key>
+			<array>
+				<string>{{ extension }}</string>
+			</array>
+			<key>CFBundleTypeMIMETypes</key>
+			<array/>
+			<key>CFBundleTypeRole</key>
+			<string>Viewer</string>
+			<key>LSItemContentTypes</key>
+			<array>
+				<string>{{ cookiecutter.bundle }}.{{ cookiecutter.app_name }}.{{ extension }}</string>
+			</array>
+			<key>LSTypeIsPackage</key>
+			<integer>1</integer>
+		</dict>
+		{% endfor %}
+	</array>
+	<key>UTExportedTypeDeclarations</key>
+	<array>
+		{% for doctype_id, doctype in cookiecutter.document_types.items() %}
+		<dict>
+			<key>UTTypeIdentifier</key>
+			<string>{{ cookiecutter.bundle }}.{{ cookiecutter.app_name }}.{{ doctype_id }}</string>
+			<key>UTTypeReferenceURL</key>
+			<string>{{ doctype.url }}</string>
+			<key>UTTypeIconFile</key>
+			<string>{{ cookiecutter.app_name }}-{{ doctype_id }}.icns</string>
+			<key>UTTypeConformsTo</key>
+			<array>
+				<string>com.apple.package</string>
+			</array>
+			<key>UTTypeDescription</key>
+			<string>{{ doctype.description }}</string>
+			<key>UTTypeTagSpecification</key>
+			<dict>
+				<key>public.filename-extension</key>
+				<array>
+					<string>{{ doctype.extension }}</string>
+				</array>
+			</dict>
+		</dict>
+		{% endfor %}
+	</array>
+	{% endif %}
+{%- if cookiecutter.info -%}
+	{%- for permission, value in cookiecutter.info.items() %}
+	<key>{{ permission }}</key>
+	{{ value|plist_value }}
+	{%- endfor -%}
+{%- endif %}
+</dict>
+</plist>

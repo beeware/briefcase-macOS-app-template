@@ -1,0 +1,16 @@
+[tool.briefcase]
+project_name = "Stub"
+bundle = "org.beeware"
+license.file = "../LICENSE"
+version = "1.0.0"
+
+[tool.briefcase.app.gui-stub]
+formal_name = "GUI Stub"
+description = "A stub binary for GUI apps that can be integrated into the macOS app template"
+sources = ['src/gui_stub']
+
+[tool.briefcase.app.console-stub]
+formal_name = "Console Stub"
+description = "A stub binary for console apps that can be integrated into the macOS app template"
+sources = ['src/console_stub']
+console_app = true

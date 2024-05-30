@@ -1,0 +1,7 @@
+.DS_Store
+.python-version
+.vscode
+.idea
+stub/build
+stub/dist
+stub/logs

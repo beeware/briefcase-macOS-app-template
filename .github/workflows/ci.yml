@@ -1,0 +1,42 @@
+name: CI
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+  workflow_call:
+
+# Cancel active CI runs for a PR before starting another run
+concurrency:
+  group: ${{ github.ref }}
+  cancel-in-progress: true
+
+defaults:
+  run:
+    shell: bash
+
+env:
+  FORCE_COLOR: "1"
+
+jobs:
+  pre-commit:
+    name: Pre-commit checks
+    uses: beeware/.github/.github/workflows/pre-commit-run.yml@main
+    with:
+      pre-commit-source: pre-commit
+
+  verify-apps:
+    name: Build apps
+    needs: pre-commit
+    uses: beeware/.github/.github/workflows/app-build-verify.yml@main
+    with:
+      python-version: ${{ matrix.python-version }}
+      runner-os: macos-latest
+      framework: ${{ matrix.framework }}
+      target-platform: macOS
+      target-format: app
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: [ "3.8", "3.9", "3.10", "3.11", "3.12" ]
+        framework: [ "toga", "pyside6", "ppb", "pygame" ]
