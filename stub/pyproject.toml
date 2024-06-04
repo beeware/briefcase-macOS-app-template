@@ -2,6 +2,7 @@
 project_name = "Stub"
 bundle = "org.beeware"
 version = "1.0.0"
+license.file = "../LICENSE"
 
 [tool.briefcase.app.gui-stub]
 formal_name = "GUI Stub"
