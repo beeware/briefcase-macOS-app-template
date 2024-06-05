@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<installer-script minSpecVersion="1.000000">
+    <title>{{ cookiecutter.formal_name }}</title>
+    <welcome file="welcome.html" mime-type="text/html" />
+    <license file="LICENSE" mime-type="text/plain" />
+    <options customize="never" allow-external-scripts="no"/>
+    <domains enable_localSystem="true" />
+    <choices-outline>
+        <line choice="{{ cookiecutter.app_name }}"/>
+    </choices-outline>
+    <choice id="{{ cookiecutter.app_name }}" title="{{ cookiecutter.app_name }}">
+        <pkg-ref id="{{ cookiecutter.app_name }}.pkg"/>
+    </choice>
+    <pkg-ref id="{{ cookiecutter.app_name }}.pkg" auth="Root">{{ cookiecutter.app_name }}.pkg</pkg-ref>
+</installer-script>
