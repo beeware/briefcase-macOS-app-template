@@ -50,26 +50,15 @@ jobs:
         cd stub
         briefcase build macOS Xcode
 
-        echo "Gather compiled binaries"
-        mv "./build/console-stub/macos/xcode/build/Release/Console Stub.app/Contents/MacOS/Console Stub" Console-Stub
-        mv "./build/gui-stub/macos/xcode/build/Release/GUI Stub.app/Contents/MacOS/GUI Stub" GUI-Stub
+        echo "Build console stub artefact"
+        mv "./build/console-stub/macos/xcode/build/Release/Console Stub.app/Contents/MacOS/Console Stub" Stub
+        codesign --remove-signature Stub
+        zip Console-Stub-${{ env.PYTHON_TAG }}-${{ steps.build-vars.outputs.BUILD_NUMBER }}.zip Stub
 
-        echo "Strip signatures"
-        # Since the project is producing generic stub binary, we can't provide
-        # any meaningful signing credentials in the Xcode project. Remove the
-        # signature from the stub binaries.
-        codesign --remove-signature Console-Stub
-        codesign --remove-signature GUI-Stub
-
-        echo "Compress distribution artefacts"
-        zip Console-Stub-${{ env.PYTHON_TAG }}-${{ steps.build-vars.outputs.BUILD_NUMBER }}.zip Console-Stub
-        zip GUI-Stub-${{ env.PYTHON_TAG }}-${{ steps.build-vars.outputs.BUILD_NUMBER }}.zip GUI-Stub
-
-    - name: Upload Stub Artefact to Release
-      uses: actions/upload-artifact@v4.3.3
-      with:
-        name: stub-${{ env.PYTHON_TAG }}-${{ steps.build-vars.outputs.BUILD_NUMBER }}
-        path: stub/*-Stub
+        echo "Build GUI stub artefact"
+        mv "./build/gui-stub/macos/xcode/build/Release/GUI Stub.app/Contents/MacOS/GUI Stub" Stub
+        codesign --remove-signature Stub
+        zip Console-Stub-${{ env.PYTHON_TAG }}-${{ steps.build-vars.outputs.BUILD_NUMBER }}.zip Stub
 
     - name: Upload Release Asset to S3
       env:
