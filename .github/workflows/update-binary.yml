@@ -49,67 +49,25 @@ jobs:
         # Generate the stub app
         cd stub
         briefcase build macOS Xcode
-        # Since the project is producing generic stub binary, we can't provide
-        # any meaningful signing credentials in the Xcode project. Remove the
-        # signature from the stub binaries.
-        codesign --remove-signature "./build/console-stub/macos/xcode/build/Release/Console Stub.app/Contents/MacOS/Console Stub"
-        codesign --remove-signature "./build/gui-stub/macos/xcode/build/Release/GUI Stub.app/Contents/MacOS/GUI Stub"
-        echo "Move the binaries into the final location"
-        mv "./build/console-stub/macos/xcode/build/Release/Console Stub.app/Contents/MacOS/Console Stub" Console-Stub-${{ env.PYTHON_TAG }}
-        mv "./build/gui-stub/macos/xcode/build/Release/GUI Stub.app/Contents/MacOS/GUI Stub" GUI-Stub-${{ env.PYTHON_TAG }}
 
-    - name: Upload Stub Artefact
-      uses: actions/upload-artifact@v4.3.3
-      with:
-        name: stub-${{ matrix.python-version }}
-        path: stub/*-Stub-${{ env.PYTHON_TAG }}
+        echo "Build console stub artefact"
+        mv "./build/console-stub/macos/xcode/build/Release/Console Stub.app/Contents/MacOS/Console Stub" Stub
+        codesign --remove-signature Stub
+        zip Console-Stub-${{ env.PYTHON_TAG }}-${{ steps.build-vars.outputs.BUILD_NUMBER }}.zip Stub
 
-  commit-stubs:
-    name: Commit stub binaries
-    needs: build-stubs
-    runs-on: macos-latest
-    steps:
-    - name: Set Build Variables
+        echo "Build GUI stub artefact"
+        mv "./build/gui-stub/macos/xcode/build/Release/GUI Stub.app/Contents/MacOS/GUI Stub" Stub
+        codesign --remove-signature Stub
+        zip Console-Stub-${{ env.PYTHON_TAG }}-${{ steps.build-vars.outputs.BUILD_NUMBER }}.zip Stub
+
+    - name: Upload Release Asset to S3
       env:
-        TAG_NAME: ${{ github.ref }}
+        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
       run: |
-        export TAG=$(basename $TAG_NAME)
-        export BRIEFCASE_VERSION="${TAG%-*}"
-        export BUILD_NUMBER="${TAG#*-}"
+        python -m pip install -U pip
+        python -m pip install -U setuptools
+        python -m pip install awscli
 
-        echo "TAG=${TAG}" | tee -a $GITHUB_ENV
-        echo "BRIEFCASE_VERSION=${BRIEFCASE_VERSION}" | tee -a $GITHUB_ENV
-        echo "BUILD_NUMBER=${BUILD_NUMBER}" | tee -a $GITHUB_ENV
-
-        if [ "${BRIEFCASE_VERSION}" == "dev" ]; then
-          # We're on the development template; push to main
-          echo "TEMPLATE_BRANCH=main" | tee -a $GITHUB_ENV
-        else
-          echo "TEMPLATE_BRANCH=v${BRIEFCASE_VERSION}" | tee -a $GITHUB_ENV
-        fi
-
-    - name: Checkout Template
-      uses: actions/checkout@v4.1.6
-
-    - name: Download Stub Artefacts
-      uses: actions/download-artifact@v4.1.7
-      with:
-        pattern: stub-*
-        path: stub
-        merge-multiple: true
-
-    - name: Commit stubs
-      run: |
-        git config user.email "brutus@beeware.org"
-        git config user.name "Brutus (robot)"
-        # Move the binary into it's final location
-        mv stub/*-Stub-* "{{ cookiecutter.format }}/{{ cookiecutter.formal_name }}.app/Contents/MacOS"
-        # Ensure the binary is executable
-        cd "{{ cookiecutter.format }}/{{ cookiecutter.formal_name }}.app/Contents/MacOS"
-        chmod 755 *-Stub-*
-        # Commit changes
-        git add ./*-Stub-*
-        git commit -m "AUTO: Update app binaries; build ${{ env.TAG }}"
-        git push origin HEAD:${{ env.TEMPLATE_BRANCH }}
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        aws s3 cp stub/Console-Stub-${{ env.PYTHON_TAG }}-${{ steps.build-vars.outputs.BUILD_NUMBER }}.zip s3://briefcase-support/python/${{ steps.build-vars.outputs.PY_VERSION }}/macOS/Console-Stub-${{ env.PYTHON_TAG }}-${{ steps.build-vars.outputs.BUILD_NUMBER }}.zip
+        aws s3 cp stub/GUI-Stub-${{ env.PYTHON_TAG }}-${{ steps.build-vars.outputs.BUILD_NUMBER }}.zip s3://briefcase-support/python/${{ steps.build-vars.outputs.PY_VERSION }}/macOS/GUI-Stub-${{ env.PYTHON_TAG }}-${{ steps.build-vars.outputs.BUILD_NUMBER }}.zip

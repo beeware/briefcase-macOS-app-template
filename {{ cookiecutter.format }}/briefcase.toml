@@ -12,6 +12,7 @@ support_path = "{{ cookiecutter.formal_name }}.app/Contents/Resources/support"
     "3.11": "support_revision = 3",
     "3.12": "support_revision = 2",
 }.get(cookiecutter.python_version|py_tag, "") }}
+stub_binary_revision = 8
 cleanup_paths = [
     "{{ cookiecutter.formal_name }}.app/Contents/Resources/support/Python.xcframework",
     "{{ cookiecutter.formal_name }}.app/Contents/Resources/support/platform-site",

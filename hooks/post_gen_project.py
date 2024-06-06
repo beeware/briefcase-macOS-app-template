@@ -1,20 +1,5 @@
 from pathlib import Path
 
-
-BIN_PATH = Path("{{ cookiecutter.formal_name }}.app/Contents/MacOS")
-
-# Rename the stub binary we want to "Stub""
-STUB_PATH = (
-    BIN_PATH
-    / "{% if cookiecutter.console_app %}Console{% else %}GUI{% endif %}-Stub-{{ cookiecutter.python_version|py_tag }}"
-)
-STUB_PATH.rename(BIN_PATH / "Stub")
-
-# Delete all stubs that aren't for the Python version and app type
-# that we are targeting
-for stub in BIN_PATH.glob("*-Stub-*"):
-    stub.unlink()
-
 # The codesign utility in recent macOS fails with obscure errors when presented with
 # CRLF line endings, but in some configurations (e.g. global `core.autocrlf=true`)
 # git may have checked out this repo in a way that put CRLF line endings in Entitlements.plist.
@@ -24,6 +9,6 @@ ENTITLEMENTS_PATH = Path("Entitlements.plist")
 xml_content = ENTITLEMENTS_PATH.read_text()
 ENTITLEMENTS_PATH.open('w', newline='\n').write(xml_content)
 
-INFO_PATH = BIN_PATH.parent / 'Info.plist'
+INFO_PATH = Path("{{ cookiecutter.formal_name }}.app/Contents/Info.plist")
 info_content = INFO_PATH.read_text()
 INFO_PATH.open('w', newline='\n').write(info_content)
