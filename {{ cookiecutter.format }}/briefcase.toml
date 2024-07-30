@@ -1,4 +1,8 @@
 # Generated using Python {{ cookiecutter.python_version }}
+[briefcase]
+# This is the start of the framework-based support package era.
+target_version = "0.3.20"
+
 [paths]
 app_path = "{{ cookiecutter.formal_name }}.app/Contents/Resources/app"
 app_packages_path = "{{ cookiecutter.formal_name }}.app/Contents/Resources/app_packages"
