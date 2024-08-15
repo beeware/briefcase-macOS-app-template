@@ -38,5 +38,14 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        python-version: [ "3.8", "3.9", "3.10", "3.11", "3.12" ]
+        python-version: [ "3.9", "3.10", "3.11", "3.12", "3.13-dev" ]
         framework: [ "toga", "pyside6", "pygame", "console" ]
+
+        exclude:
+          # PySide6 hasn't published 3.13 wheels.
+          - python-version: "3.13-dev"
+            framework: "pyside6"
+
+          # Pygame hasn't published 3.13 wheels.
+          - python-version: "3.13-dev"
+            framework: "pygame"
