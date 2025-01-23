@@ -17,7 +17,7 @@ runtime_path = "Python.xcframework/macos-arm64_x86_64/Python.framework"
     "3.12": "support_revision = 6",
     "3.13": "support_revision = 3",
 }.get(cookiecutter.python_version|py_tag, "") }}
-stub_binary_revision = 9
+stub_binary_revision = 10
 cleanup_paths = [
     "{{ cookiecutter.formal_name }}.app/Contents/Frameworks/Python.framework/**/Headers",
     "{{ cookiecutter.formal_name }}.app/Contents/Frameworks/Python.framework/**/include",
