@@ -44,7 +44,7 @@
 				{%- endif %}
 			</array>
 			<key>LSTypeIsPackage</key>
-			<integer>{{ document_type.is_package | default(False) }}</integer>
+			<integer>{{ document_type.is_package | default(False) | int }}</integer>
 		</dict>
 		{% endfor %}
 	</array>
