@@ -51,11 +51,7 @@
 		</dict>
 		{% endfor %}
 	</array>
-	<key>UTExportedTypeDeclarations</key>
-	<array>
-		{% for document_type_id, document_type in cookiecutter.document_types.items() -%}
-		{% set macOS = document_type.macOS | default({}) %}
-		{% if macOS.LSHandlerRank|default("Owner") == "Owner" -%}
+	{% macro type_declaration(cookiecutter, document_type_id, document_type, macOS) -%}
 		<dict>
 			<key>UTTypeConformsTo</key>
 			<array>
@@ -82,40 +78,22 @@
 				</array>
 			</dict>
 		</dict>
+	{%- endmacro %}
+	<key>UTExportedTypeDeclarations</key>
+	<array>
+		{% for document_type_id, document_type in cookiecutter.document_types.items() -%}
+		{% set macOS = document_type.macOS | default({}) -%}
+		{% if macOS.LSHandlerRank|default("Owner") == "Owner" -%}
+		{{ type_declaration(cookiecutter, document_type_id, document_type, macOS) }}
 		{% endif -%}
 		{%- endfor %}
 	</array>
 	<key>UTImportedTypeDeclarations</key>
 	<array>
 		{% for document_type_id, document_type in cookiecutter.document_types.items() -%}
-		{% set macOS = document_type.macOS | default({}) %}
+		{% set macOS = document_type.macOS | default({}) -%}
 		{% if macOS.LSHandlerRank|default("Owner") != "Owner" -%}
-		<dict>
-			<key>UTTypeConformsTo</key>
-			<array>
-				<string>{{ "com.apple.package" if macOS.LSTypeIsPackage|default(False) else "public.data" }}</string>
-				{%- for type in macOS.UTTypeConformsTo | default(["public.content"]) %}
-				<string>{{ type }}</string>
-				{%- endfor %}
-			</array>
-			<key>UTTypeDescription</key>
-			<string>{{ document_type.description }}</string>
-			<key>UTTypeIconFile</key>
-			<string>{{ cookiecutter.app_name }}-{{ document_type_id }}.icns</string>
-			<key>UTTypeIdentifier</key>
-			{% if macOS.LSItemContentTypes is defined -%}
-			<string>{{ macOS.LSItemContentTypes[0] }}</string>
-			{%- else -%}
-			<string>{{ cookiecutter.bundle }}.{{ cookiecutter.app_name }}.{{ document_type_id }}</string>
-			{%- endif %}
-			<key>UTTypeTagSpecification</key>
-			<dict>
-				<key>public.filename-extension</key>
-				<array>
-					<string>{{ document_type.extension }}</string>
-				</array>
-			</dict>
-		</dict>
+		{{ type_declaration(cookiecutter, document_type_id, document_type, macOS) }}
 		{% endif -%}
 		{%- endfor %}
 	</array>
