@@ -30,46 +30,47 @@
 	<key>CFBundleDocumentTypes</key>
 	<array>
 		{% for document_type_id, document_type in cookiecutter.document_types.items() %}
+		{% set macOS = document_type.macOS | default({}) %}
 		<dict>
 			<key>CFBundleTypeRole</key>
-			<string>{{ "Editor" if document_type.can_edit|default(True) else "Viewer" }}</string>
+			<string>{{ macOS.CFBundleTypeRole | default("Editor") }}</string>
 			<key>LSHandlerRank</key>
-			<string>{{ document_type.handler_rank | default("Owner") }}</string>
+			<string>{{ macOS.LSHandlerRank | default("Owner") }}</string>
 			<key>LSItemContentTypes</key>
 			<array>
-				{% if document_type.apple_content_type is defined -%}
-				<string>{{ document_type.apple_content_type }}</string>
-				{%- else -%}
+				{%- if macOS.LSItemContentTypes is defined -%}
+				{% for content_type in macOS.LSItemContentTypes %}
+				<string>{{ content_type }}</string>
+				{%- endfor %}
+				{%- else %}
 				<string>{{ cookiecutter.bundle }}.{{ cookiecutter.app_name }}.{{ document_type_id }}</string>
 				{%- endif %}
 			</array>
 			<key>LSTypeIsPackage</key>
-			{{ "<true/>" if document_type.is_package | default(False) else "<false/>"}}
+			{{ "<true/>" if macOS.LSTypeIsPackage | default(False) else "<false/>"}}
 		</dict>
 		{% endfor %}
 	</array>
 	<key>UTExportedTypeDeclarations</key>
 	<array>
 		{% for document_type_id, document_type in cookiecutter.document_types.items() -%}
-		{% if document_type.handler_rank|default("Owner") == "Owner" -%}
+		{% set macOS = document_type.macOS | default({}) %}
+		{% if macOS.LSHandlerRank|default("Owner") == "Owner" -%}
 		<dict>
 			<key>UTTypeConformsTo</key>
 			<array>
-				<string>{{ "com.apple.package" if document_type.is_package|default(False) else "public.data" }}</string>
-				<string>public.content</string>
-				{%- if document_type.apple_conforms_to is defined %}
-				{% for type in document_type.apple_conforms_to -%}
+				<string>{{ "com.apple.package" if macOS.LSTypeIsPackage|default(False) else "public.data" }}</string>
+				{%- for type in macOS.UTTypeConformsTo | default(["public.content"]) %}
 				<string>{{ type }}</string>
-				{% endfor -%}
-				{% endif %}
+				{%- endfor %}
 			</array>
 			<key>UTTypeDescription</key>
 			<string>{{ document_type.description }}</string>
 			<key>UTTypeIconFile</key>
 			<string>{{ cookiecutter.app_name }}-{{ document_type_id }}.icns</string>
 			<key>UTTypeIdentifier</key>
-			{% if document_type.apple_content_type is defined -%}
-			<string>{{ document_type.apple_content_type }}</string>
+			{% if macOS.LSItemContentTypes is defined -%}
+			<string>{{ macOS.LSItemContentTypes[0] }}</string>
 			{%- else -%}
 			<string>{{ cookiecutter.bundle }}.{{ cookiecutter.app_name }}.{{ document_type_id }}</string>
 			{%- endif %}
@@ -87,23 +88,23 @@
 	<key>UTImportedTypeDeclarations</key>
 	<array>
 		{% for document_type_id, document_type in cookiecutter.document_types.items() -%}
-		{% if document_type.handler_rank|default("Owner") != "Owner" -%}
+		{% set macOS = document_type.macOS | default({}) %}
+		{% if macOS.LSHandlerRank|default("Owner") != "Owner" -%}
 		<dict>
 			<key>UTTypeConformsTo</key>
 			<array>
-				<string>{{ "com.apple.package" if document_type.is_package|default(False) else "public.data" }}</string>
-				<string>public.content</string>
-				{%- if document_type.apple_conforms_to is defined %}
-				{% for type in document_type.apple_conforms_to -%}
+				<string>{{ "com.apple.package" if macOS.LSTypeIsPackage|default(False) else "public.data" }}</string>
+				{%- for type in macOS.UTTypeConformsTo | default(["public.content"]) %}
 				<string>{{ type }}</string>
-				{% endfor -%}
-				{% endif %}
+				{%- endfor %}
 			</array>
 			<key>UTTypeDescription</key>
 			<string>{{ document_type.description }}</string>
+			<key>UTTypeIconFile</key>
+			<string>{{ cookiecutter.app_name }}-{{ document_type_id }}.icns</string>
 			<key>UTTypeIdentifier</key>
-			{% if document_type.apple_content_type is defined -%}
-			<string>{{ document_type.apple_content_type }}</string>
+			{% if macOS.LSItemContentTypes is defined -%}
+			<string>{{ macOS.LSItemContentTypes[0] }}</string>
 			{%- else -%}
 			<string>{{ cookiecutter.bundle }}.{{ cookiecutter.app_name }}.{{ document_type_id }}</string>
 			{%- endif %}
