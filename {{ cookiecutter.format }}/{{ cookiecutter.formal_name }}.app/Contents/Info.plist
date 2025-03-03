@@ -46,8 +46,6 @@
 				<string>{{ cookiecutter.bundle }}.{{ cookiecutter.app_name }}.{{ document_type_id }}</string>
 				{%- endif %}
 			</array>
-			<key>LSTypeIsPackage</key>
-			{{ "<true/>" if macOS.LSTypeIsPackage | default(False) else "<false/>"}}
 		</dict>
 		{% endfor %}
 	</array>
