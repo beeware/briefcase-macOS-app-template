@@ -68,6 +68,8 @@
 			{%- else -%}
 			<string>{{ cookiecutter.bundle }}.{{ cookiecutter.app_name }}.{{ document_type_id }}</string>
 			{%- endif %}
+			<key>UTTypeReferenceURL</key>
+			<string>{{ document_type.url }}</string>
 			<key>UTTypeTagSpecification</key>
 			<dict>
 				<key>public.filename-extension</key>
