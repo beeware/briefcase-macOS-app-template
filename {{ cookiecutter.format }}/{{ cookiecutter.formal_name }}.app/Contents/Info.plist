@@ -26,11 +26,11 @@
 	<string>NSApplication</string>
 	<key>MainModule</key>
 	<string>{{ cookiecutter.module_name }}</string>
-	{% if cookiecutter.document_types %}
+	{% if cookiecutter.document_types -%}
 	<key>CFBundleDocumentTypes</key>
 	<array>
-		{% for document_type_id, document_type in cookiecutter.document_types.items() %}
-			{% set macOS = document_type.macOS | default({}) %}
+		{% for document_type_id, document_type in cookiecutter.document_types.items() -%}
+			{% set macOS = document_type.macOS | default({}) -%}
 		<dict>
 			<key>CFBundleTypeRole</key>
 			<string>{{ macOS.CFBundleTypeRole | default("Editor") }}</string>
@@ -47,9 +47,9 @@
 				{%- endif %}
 			</array>
 		</dict>
-		{% endfor %}
+		{%- endfor %}
 	</array>
-		{% macro type_declaration(cookiecutter, document_type_id, document_type, macOS) -%}
+		{%- macro type_declaration(cookiecutter, document_type_id, document_type, macOS) -%}
 		<dict>
 			<key>UTTypeConformsTo</key>
 			<array>
@@ -85,7 +85,7 @@
 			{% set macOS = document_type.macOS | default({}) -%}
 			{% if macOS.LSHandlerRank|default("Owner") == "Owner" -%}
 		{{ type_declaration(cookiecutter, document_type_id, document_type, macOS) }}
-			{% endif -%}
+			{%- endif %}
 		{%- endfor %}
 	</array>
 	<key>UTImportedTypeDeclarations</key>
@@ -94,10 +94,10 @@
 			{% set macOS = document_type.macOS | default({}) -%}
 			{% if macOS.LSHandlerRank|default("Owner") != "Owner" -%}
 		{{ type_declaration(cookiecutter, document_type_id, document_type, macOS) }}
-			{% endif -%}
+			{%- endif %}
 		{%- endfor %}
 	</array>
-	{% endif -%}
+	{%- endif -%}
 {%- if cookiecutter.info -%}
 	{%- for permission, value in cookiecutter.info.items() %}
 	<key>{{ permission }}</key>
