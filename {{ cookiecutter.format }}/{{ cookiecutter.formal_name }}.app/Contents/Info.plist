@@ -30,7 +30,7 @@
 	<key>CFBundleDocumentTypes</key>
 	<array>
 		{% for document_type_id, document_type in cookiecutter.document_types.items() %}
-		{% set macOS = document_type.macOS | default({}) %}
+			{% set macOS = document_type.macOS | default({}) %}
 		<dict>
 			<key>CFBundleTypeRole</key>
 			<string>{{ macOS.CFBundleTypeRole | default("Editor") }}</string>
@@ -39,9 +39,9 @@
 			<key>LSItemContentTypes</key>
 			<array>
 				{%- if macOS.LSItemContentTypes is defined -%}
-				{% for content_type in macOS.LSItemContentTypes %}
+					{% for content_type in macOS.LSItemContentTypes %}
 				<string>{{ content_type }}</string>
-				{%- endfor %}
+					{%- endfor %}
 				{%- else %}
 				<string>{{ cookiecutter.bundle }}.{{ cookiecutter.app_name }}.{{ document_type_id }}</string>
 				{%- endif %}
@@ -49,7 +49,7 @@
 		</dict>
 		{% endfor %}
 	</array>
-	{% macro type_declaration(cookiecutter, document_type_id, document_type, macOS) -%}
+		{% macro type_declaration(cookiecutter, document_type_id, document_type, macOS) -%}
 		<dict>
 			<key>UTTypeConformsTo</key>
 			<array>
@@ -78,23 +78,23 @@
 				</array>
 			</dict>
 		</dict>
-	{%- endmacro %}
+		{%- endmacro %}
 	<key>UTExportedTypeDeclarations</key>
 	<array>
 		{% for document_type_id, document_type in cookiecutter.document_types.items() -%}
-		{% set macOS = document_type.macOS | default({}) -%}
-		{% if macOS.LSHandlerRank|default("Owner") == "Owner" -%}
+			{% set macOS = document_type.macOS | default({}) -%}
+			{% if macOS.LSHandlerRank|default("Owner") == "Owner" -%}
 		{{ type_declaration(cookiecutter, document_type_id, document_type, macOS) }}
-		{% endif -%}
+			{% endif -%}
 		{%- endfor %}
 	</array>
 	<key>UTImportedTypeDeclarations</key>
 	<array>
 		{% for document_type_id, document_type in cookiecutter.document_types.items() -%}
-		{% set macOS = document_type.macOS | default({}) -%}
-		{% if macOS.LSHandlerRank|default("Owner") != "Owner" -%}
+			{% set macOS = document_type.macOS | default({}) -%}
+			{% if macOS.LSHandlerRank|default("Owner") != "Owner" -%}
 		{{ type_declaration(cookiecutter, document_type_id, document_type, macOS) }}
-		{% endif -%}
+			{% endif -%}
 		{%- endfor %}
 	</array>
 	{% endif -%}
