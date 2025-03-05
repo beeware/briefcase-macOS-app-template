@@ -45,7 +45,7 @@
 				{%- endif %}
 			</array>
 		</dict>
-		{%- endfor %}
+		{% endfor %}
 	</array>
 		{%- macro type_declaration(cookiecutter, document_type_id, document_type, macOS) -%}
 		<dict>
