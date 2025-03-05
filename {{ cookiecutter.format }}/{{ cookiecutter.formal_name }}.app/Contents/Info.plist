@@ -74,6 +74,8 @@
 				<array>
 					<string>{{ document_type.extension }}</string>
 				</array>
+				<key>public.mime-type</key>
+				<string>{% if document_type.get('mime_type') %}{{ document_type.mime_type }}{% else %}application/x-{{ cookiecutter.app_name }}-{{ document_type_id }}{% endif %}</string>
 			</dict>
 		</dict>
 		{% endmacro %}
