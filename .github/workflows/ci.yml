@@ -40,3 +40,10 @@ jobs:
       matrix:
         python-version: [ "3.9", "3.10", "3.11", "3.12", "3.13", "3.14" ]
         framework: [ "toga", "pyside6", "pygame", "console" ]
+
+        exclude:
+          # No 3.14 wheels for PySide6 or Pygame.
+          - python-version: "3.14"
+            framework: pyside6
+          - python-version: "3.14"
+            framework: pygame
