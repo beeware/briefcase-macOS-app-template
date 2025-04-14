@@ -10,6 +10,7 @@
     "version": "1.0.0",
     "build": "1",
     "bundle": "com.example",
+    "universal_build": true,
     "python_version": "3.X.0",
     "_extensions": [
         "briefcase.integrations.cookiecutter.PythonVersionExtension",
