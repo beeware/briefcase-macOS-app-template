@@ -3,7 +3,7 @@
     <title>{{ cookiecutter.formal_name }}</title>
     <welcome file="welcome.html" mime-type="text/html" />
     <license file="LICENSE" mime-type="text/plain" />
-    <options customize="never" allow-external-scripts="no"/>
+    <options customize="never" allow-external-scripts="no" hostArchitectures="{% if cookiecutter.universal_build %}x86_64,arm64{% else %}{{ cookiecutter.host_arch }}{% endif %}" />
     <domains enable_localSystem="true" />
     <choices-outline>
         <line choice="{{ cookiecutter.app_name }}"/>
