@@ -1,6 +1,11 @@
 #!/bin/sh
 echo "Post installation process started"
 
+if [ ! -d "/usr/local/bin" ]; then
+    echo "Creating /usr/local/bin directory"
+    mkdir -p /usr/local/bin
+fi
+
 echo "Install binary symlink"
 ln -si "/Library/{{ cookiecutter.formal_name }}/{{ cookiecutter.formal_name }}.app/Contents/MacOS/{{ cookiecutter.formal_name }}" /usr/local/bin/{{ cookiecutter.app_name }}
 
