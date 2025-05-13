@@ -51,8 +51,7 @@
 		<dict>
 			<key>UTTypeConformsTo</key>
 			<array>
-				<string>{{ "com.apple.package" if macOS.LSTypeIsPackage|default(False) else "public.data" }}</string>
-				{%- for type in macOS.UTTypeConformsTo | default(["public.content"]) %}
+				{%- for type in macOS.UTTypeConformsTo %}
 				<string>{{ type }}</string>
 				{%- endfor %}
 			</array>
