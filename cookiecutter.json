@@ -10,7 +10,10 @@
     "version": "1.0.0",
     "build": "1",
     "bundle": "com.example",
+    "universal_build": true,
+    "host_arch": "arm64",
     "python_version": "3.X.0",
+    "min_os_version": "11.0",
     "_extensions": [
         "briefcase.integrations.cookiecutter.PythonVersionExtension",
         "briefcase.integrations.cookiecutter.PListExtension"
