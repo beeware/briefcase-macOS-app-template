@@ -1,4 +1,4 @@
-xBriefcase macOS App Template
+Briefcase macOS App Template
 ============================
 
 A `Cookiecutter <https://github.com/cookiecutter/cookiecutter/>`__ template for
