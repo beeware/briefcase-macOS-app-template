@@ -32,6 +32,10 @@
 		{% for document_type_id, document_type in cookiecutter.document_types.items() -%}
 			{% set macOS = document_type.macOS | default({}) -%}
 		<dict>
+			<key>CFBundleTypeName</key>
+			<string>{{ document_type.description }}</string>
+			<key>CFBundleTypeIconFile</key>
+			<string>{{ cookiecutter.app_name }}-{{ document_type_id }}.icns</string>
 			<key>CFBundleTypeRole</key>
 			<string>{{ macOS.CFBundleTypeRole | default("Editor") }}</string>
 			<key>LSHandlerRank</key>
