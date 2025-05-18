@@ -42,8 +42,8 @@
 			<string>{{ macOS.LSHandlerRank | default("Owner") }}</string>
 			<key>LSItemContentTypes</key>
 			<array>
-				{%- if macOS.LSItemContentType is defined %}
-				<string>{{ macOS.LSItemContentType }}</string>
+				{%- if macOS.LSItemContentTypes is defined %}
+				<string>{{ macOS.LSItemContentTypes }}</string>
 				{%- else %}
 				<string>{{ cookiecutter.bundle }}.{{ cookiecutter.app_name }}.{{ document_type_id }}</string>
 				{%- endif %}
@@ -64,8 +64,8 @@
 			<key>UTTypeIconFile</key>
 			<string>{{ cookiecutter.app_name }}-{{ document_type_id }}.icns</string>
 			<key>UTTypeIdentifier</key>
-			{% if macOS.LSItemContentType is defined -%}
-			<string>{{ macOS.LSItemContentType }}</string>
+			{% if macOS.LSItemContentTypes is defined -%}
+			<string>{{ macOS.LSItemContentTypes }}</string>
 			{%- else -%}
 			<string>{{ cookiecutter.bundle }}.{{ cookiecutter.app_name }}.{{ document_type_id }}</string>
 			{%- endif %}
