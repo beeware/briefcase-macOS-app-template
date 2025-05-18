@@ -95,7 +95,7 @@
 	<array>
 		{% for document_type_id, document_type in cookiecutter.document_types.items() -%}
 			{% set macOS = document_type.macOS | default({}) -%}
-			{% if macOS.builtin_type|default(false) is false and macOS.LSHandlerRank|default("Owner") != "Owner" -%}
+			{% if macOS.is_core_type|default(false) is false and macOS.LSHandlerRank|default("Owner") != "Owner" -%}
 		{{ type_declaration(cookiecutter, document_type_id, document_type, macOS) }}
 			{%- endif %}
 		{%- endfor %}
