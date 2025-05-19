@@ -4,11 +4,11 @@
 target_version = "0.3.20"
 
 [paths]
-app_path = "{{ cookiecutter.formal_name }}.app/Contents/Resources/app"
-app_packages_path = "{{ cookiecutter.formal_name }}.app/Contents/Resources/app_packages"
-info_plist_path = "{{ cookiecutter.formal_name }}.app/Contents/Info.plist"
+app_path = "{{ cookiecutter.formal_name|replace('"', '\\"') }}.app/Contents/Resources/app"
+app_packages_path = "{{ cookiecutter.formal_name|replace('"', '\\"') }}.app/Contents/Resources/app_packages"
+info_plist_path = '{{ cookiecutter.formal_name|replace('"', '\\"') }}.app/Contents/Info.plist'
 entitlements_path = "Entitlements.plist"
-support_path = "{{ cookiecutter.formal_name }}.app/Contents/Frameworks"
+support_path = "{{ cookiecutter.formal_name|replace('"', '\\"') }}.app/Contents/Frameworks"
 runtime_path = "Python.xcframework/macos-arm64_x86_64/Python.framework"
 {{ {
     "3.9": "support_revision = 16",
@@ -20,12 +20,12 @@ runtime_path = "Python.xcframework/macos-arm64_x86_64/Python.framework"
 }.get(cookiecutter.python_version|py_tag, "") }}
 stub_binary_revision = 11
 cleanup_paths = [
-    "{{ cookiecutter.formal_name }}.app/Contents/Frameworks/Python.framework/**/Headers",
-    "{{ cookiecutter.formal_name }}.app/Contents/Frameworks/Python.framework/**/include",
-    "{{ cookiecutter.formal_name }}.app/Contents/Frameworks/Python.framework/**/config-*-darwin",
-    "{{ cookiecutter.formal_name }}.app/Contents/Frameworks/Python.framework/**/pkg-config",
+    "{{ cookiecutter.formal_name|replace('"', '\\"') }}.app/Contents/Frameworks/Python.framework/**/Headers",
+    "{{ cookiecutter.formal_name|replace('"', '\\"') }}.app/Contents/Frameworks/Python.framework/**/include",
+    "{{ cookiecutter.formal_name|replace('"', '\\"') }}.app/Contents/Frameworks/Python.framework/**/config-*-darwin",
+    "{{ cookiecutter.formal_name|replace('"', '\\"') }}.app/Contents/Frameworks/Python.framework/**/pkg-config",
 ]
-icon = "{{ cookiecutter.formal_name }}.app/Contents/Resources/{{ cookiecutter.app_name }}.icns"
+icon = "{{ cookiecutter.formal_name|replace('"', '\\"') }}.app/Contents/Resources/{{ cookiecutter.app_name }}.icns"
 {% for extension, doctype in cookiecutter.document_types.items() -%}
-document_type_icon.{{ extension }} = "{{ cookiecutter.formal_name }}.app/Contents/Resources/{{ cookiecutter.app_name }}-{{ extension }}.icns"
+document_type_icon.{{ extension }} = "{{ cookiecutter.formal_name|replace('"', '\\"') }}.app/Contents/Resources/{{ cookiecutter.app_name }}-{{ extension }}.icns"
 {% endfor %}
