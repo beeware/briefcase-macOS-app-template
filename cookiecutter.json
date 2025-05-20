@@ -16,6 +16,7 @@
     "min_os_version": "11.0",
     "_extensions": [
         "briefcase.integrations.cookiecutter.PythonVersionExtension",
-        "briefcase.integrations.cookiecutter.PListExtension"
+        "briefcase.integrations.cookiecutter.PListExtension",
+        "briefcase.integrations.cookiecutter.TOMLEscape"
     ]
 }
