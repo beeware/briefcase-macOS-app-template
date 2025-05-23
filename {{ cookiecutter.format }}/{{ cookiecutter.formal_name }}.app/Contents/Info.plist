@@ -43,7 +43,7 @@
 			<key>LSItemContentTypes</key>
 			<array>
 				{%- if macOS.LSItemContentTypes is defined %}
-				<string>{{ macOS.LSItemContentTypes }}</string>
+				<string>{{ macOS.LSItemContentTypes[0] }}</string>
 				{%- else %}
 				<string>{{ cookiecutter.bundle }}.{{ cookiecutter.app_name }}.{{ document_type_id }}</string>
 				{%- endif %}
@@ -65,7 +65,7 @@
 			<string>{{ cookiecutter.app_name }}-{{ document_type_id }}.icns</string>
 			<key>UTTypeIdentifier</key>
 			{% if macOS.LSItemContentTypes is defined -%}
-			<string>{{ macOS.LSItemContentTypes }}</string>
+			<string>{{ macOS.LSItemContentTypes[0] }}</string>
 			{%- else -%}
 			<string>{{ cookiecutter.bundle }}.{{ cookiecutter.app_name }}.{{ document_type_id }}</string>
 			{%- endif %}
