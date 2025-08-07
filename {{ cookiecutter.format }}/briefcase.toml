@@ -11,14 +11,13 @@ entitlements_path = "Entitlements.plist"
 support_path = "{{ cookiecutter.formal_name|escape_toml }}.app/Contents/Frameworks"
 runtime_path = "Python.xcframework/macos-arm64_x86_64/Python.framework"
 {{ {
-    "3.9": "support_revision = 16",
     "3.10": "support_revision = 12",
     "3.11": "support_revision = 7",
     "3.12": "support_revision = 7",
-    "3.13": "support_revision = 9",
-    "3.14": "support_revision = 5",
+    "3.13": "support_revision = 10",
+    "3.14": "support_revision = 6",
 }.get(cookiecutter.python_version|py_tag, "") }}
-stub_binary_revision = 11
+stub_binary_revision = 12
 cleanup_paths = [
     "support/Python.xcframework/**/Headers",
     "support/Python.xcframework/**/include",
