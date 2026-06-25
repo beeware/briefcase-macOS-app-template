@@ -1,6 +1,6 @@
 #!/bin/sh
 echo "Post installation process started"
-
+{% if cookiecutter.console_app %}
 if [ ! -d "/usr/local/bin" ]; then
     echo "Creating /usr/local/bin directory"
     mkdir -p /usr/local/bin
@@ -8,5 +8,11 @@ fi
 
 echo "Install binary symlink"
 ln -si "/Library/{{ cookiecutter.formal_name }}/{{ cookiecutter.formal_name }}.app/Contents/MacOS/{{ cookiecutter.formal_name }}" /usr/local/bin/{{ cookiecutter.app_name }}
+{% endif %}
+# Run the user-provided post-install script, if one was included.
+if [ -e "$(dirname "$0")/_postinstall" ]; then
+    echo "Running post-install script"
+    "$(dirname "$0")/_postinstall"
+fi
 
 echo "Post installation process finished"
