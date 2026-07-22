@@ -14,6 +14,7 @@
     "host_arch": "arm64",
     "python_version": "3.X.0",
     "min_os_version": "11.0",
+    "use_framework": true,
     "_extensions": [
         "briefcase.integrations.cookiecutter.PythonVersionExtension",
         "briefcase.integrations.cookiecutter.PListExtension",
