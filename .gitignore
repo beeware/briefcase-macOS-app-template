@@ -2,6 +2,7 @@
 .python-version
 .vscode
 .idea
+.rumdl_cache
 stub/build
 stub/dist
 stub/logs

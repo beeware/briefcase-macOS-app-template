@@ -15,13 +15,13 @@ support_path = "{{ cookiecutter.formal_name|escape_toml }}.app/Contents/Resource
 {% endif -%}
 runtime_path = "Python.xcframework/macos-arm64_x86_64/Python.framework"
 {{ {
-    "3.10": "support_revision = 14",
-    "3.11": "support_revision = 9",
-    "3.12": "support_revision = 9",
-    "3.13": "support_revision = 14",
-    "3.14": "support_revision = 10",
+    "3.11": "support_revision = 10",
+    "3.12": "support_revision = 10",
+    "3.13": "support_revision = 15",
+    "3.14": "support_revision = 11",
+    "3.15": "support_revision = 0",
 }.get(cookiecutter.python_version|py_tag, "") }}
-stub_binary_revision = "15"
+stub_binary_revision = "16"
 cleanup_paths = [
 {% if cookiecutter.use_framework -%}
     "support/Python.xcframework/**/Headers",
