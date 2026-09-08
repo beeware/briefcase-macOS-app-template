@@ -7,8 +7,8 @@ from pathlib import Path
 ENTITLEMENTS_PATH = Path("Entitlements.plist")
 # This implicitly uses "universal" newlines mode.
 xml_content = ENTITLEMENTS_PATH.read_text()
-ENTITLEMENTS_PATH.open('w', newline='\n').write(xml_content)
+ENTITLEMENTS_PATH.open("w", newline="\n").write(xml_content)
 
 INFO_PATH = Path("{{ cookiecutter.formal_name|escape_toml }}.app/Contents/Info.plist")
 info_content = INFO_PATH.read_text()
-INFO_PATH.open('w', newline='\n').write(info_content)
+INFO_PATH.open("w", newline="\n").write(info_content)
