@@ -34,7 +34,7 @@ jobs:
     uses: beeware/.github/.github/workflows/app-build-verify.yml@main
     with:
       python-version: ${{ matrix.python-version }}
-      runner-os: macos-latest
+      runner-os: macos-26
       framework: ${{ matrix.framework }}
       target-platform: macOS
       target-format: app
