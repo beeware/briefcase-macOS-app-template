@@ -73,6 +73,10 @@ cleanup_paths = [
     "support/Python.xcframework/**/include",
     "support/Python.xcframework/**/python*/config-*-darwin",
     "support/Python.xcframework/**/pkgconfig",
+    {% if not cookiecutter.allow_subprocesses -%}
+    "support/Python.xcframework/**/Python.framework/Versions/3.*/bin",
+    "support/Python.xcframework/**/Python.framework/Versions/3.*/Resources/Python.app",
+    {% endif -%}
 {% else -%}
 {% endif -%}
 ]
