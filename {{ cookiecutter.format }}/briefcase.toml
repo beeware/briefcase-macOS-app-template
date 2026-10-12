@@ -16,18 +16,18 @@ support_path = "{{ cookiecutter.formal_name|escape_toml }}.app/Contents/Resource
 runtime_path = "Python.xcframework/macos-arm64_x86_64/Python.framework"
 
 {{ {
-    "3.11": 'support_revision = "10"',
-    "3.12": 'support_revision = "10"',
-    "3.13": 'support_revision = "15"',
-    "3.14": 'support_revision = "11"',
-    "3.15": 'support_revision = "0"',
+    "3.11": 'support_revision = "11"',
+    "3.12": 'support_revision = "11"',
+    "3.13": 'support_revision = "16"',
+    "3.14": 'support_revision = "12"',
+    "3.15": 'support_revision = "1"',
 }.get(cookiecutter.python_version|py_tag, "") }}
 {{ {
-    "3.11": 'support_package_hash = "sha256:d8073adc317b9f01289fb13646a4c4d3e5005fe4e9c6579f92febc029ccf4bff"',
-    "3.12": 'support_package_hash = "sha256:db6c39b27f849414f442b35540da88d8cdcae55a5f266802cac425de8821f996"',
-    "3.13": 'support_package_hash = "sha256:1e4630ba00f90bde7e44e54386bc5b2b860dce473d70c2cef9fe651642820bc1"',
-    "3.14": 'support_package_hash = "sha256:6b4c4e74128573c2330e579512e538fcc57b02df0748a0eae1b3e8922a71aac3"',
-    "3.15": 'support_package_hash = "sha256:81639ec53cb7a84dad7f68a4d4c0d092edacd8017f5f32ca2129c4ea17a9f6bd"',
+    "3.11": 'support_package_hash = "sha256:086d78092da859aba313bd80da4b3d0458a41a92d26d8073c4e82386ee5a1372"',
+    "3.12": 'support_package_hash = "sha256:49c0c2f371d1e710bf9fe1a729f2b032278915a23011fec658160f7b3760e4a1"',
+    "3.13": 'support_package_hash = "sha256:29334305ef0e1e7e58198c195c7e3707afe38be9ebf134840b156c369f84f737"',
+    "3.14": 'support_package_hash = "sha256:c64f6431e336f3f7a830194a2a1aad1129077da51688d9d8807bfb3b52d73138"',
+    "3.15": 'support_package_hash = "sha256:3170d23d8942a41ef8cf57b9b5bc02dd496559f994bebbbef43629f491fb7f6e"',
 }.get(cookiecutter.python_version|py_tag, "") }}
 
 stub_binary_revision = "16"
