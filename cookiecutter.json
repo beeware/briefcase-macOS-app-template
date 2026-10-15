@@ -15,6 +15,7 @@
     "python_version": "3.X.0",
     "min_os_version": "11.0",
     "use_framework": true,
+    "allow_subprocesses": false,
     "_extensions": [
         "briefcase.integrations.cookiecutter.PythonVersionExtension",
         "briefcase.integrations.cookiecutter.PListExtension",
